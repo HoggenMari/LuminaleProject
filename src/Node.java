@@ -1,4 +1,3 @@
-import hypermedia.net.UDP;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -17,7 +16,6 @@ public class Node {
 	ArrayList<Nozzle> nozzleList = new ArrayList<Nozzle>();
 	private PImage image;
 
-	private UDP udp;
 
 	private final String ip = "224.1.1.1";
 	private InetAddress dest;
@@ -39,7 +37,6 @@ public class Node {
 		for(int i=0; i<leds_of_nozzle.length; i++){
 			nozzleList.add(new Nozzle(p,leds_of_nozzle[i]));
 		}
-		udp = new UDP(this, 5026);
 		
 		int sum = 0;
 		for (int i : leds_of_nozzle) {

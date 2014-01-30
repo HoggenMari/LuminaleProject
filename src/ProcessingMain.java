@@ -5,6 +5,7 @@ import controlP5.ControlP5;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import processing.core.*;
 
 public class ProcessingMain extends PApplet {
 	
