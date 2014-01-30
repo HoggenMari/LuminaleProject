@@ -57,7 +57,7 @@ public class ProcessingMain extends PApplet {
 	private final byte CONTROLLER_ID_2 = 4;
 	private Pavillon scp;
 
-
+	DijkstraPaint dp;
 
 
 
@@ -137,6 +137,9 @@ public class ProcessingMain extends PApplet {
 		String ip = "224.1.1.1";
 		scp = new Pavillon(ip, 5026, 4);
 		scp.add(node1);
+		
+		dp = new DijkstraPaint();
+		dp.set();
 
 
 		/*m = new Movie(this,"/Users/mariushoggenmuller/Documents/BachelorArbeit/FinalLighterSketch/Videos/Neon Jogginghose.avi");
@@ -240,6 +243,9 @@ public class ProcessingMain extends PApplet {
 		    
 		    pg2.endDraw();
 		    
+			dp.paint();
+
+		    
 		    
 		    
 		   }
@@ -290,7 +296,7 @@ public class ProcessingMain extends PApplet {
 	/*public void movieEvent(Movie m) {
 		m.read();
 	}*/
-
+	
 
 
 }
