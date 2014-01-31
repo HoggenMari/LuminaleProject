@@ -1,9 +1,10 @@
 
 import java.io.IOException;
 
-import controlP5.ControlEvent;
 import controlP5.ControlP5;
-import controlP5.Textfield;
+import processing.core.PApplet;
+import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.core.*;
 
 public class ProcessingMain extends PApplet {
@@ -11,30 +12,34 @@ public class ProcessingMain extends PApplet {
 	/*Luminale
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 	
-	//Network settings
-	private final String IP = "224.1.1.1";
-	private final int PORT = 5026;
-	private final byte CONTROLLER_ID_1 = 4;
-	private final byte CONTROLLER_ID_2 = 4;
-	
-	//Init Nozzles, Node, Sculpture Objects
-	private final int NODE1_LEDS[] = {90,60,75,60,60,75,60,75};
-	private final int NODE2_LEDS[] = {75,75,75,75,60,60,75,75,60,90};
-	private final int NODE3_LEDS[] = {75,75,75,60,90,75,75,60,75,75,75};
-	private final int NODE4_LEDS[] = {60,75,60,75,60,75,75,60};
-	private final int NODE5_LEDS[] = {60,90,75,60,75,75,75,90,75,75,60};
-	private final int NODE6_LEDS[] = {75,75,45,90,60,60,90,75,60};
-	private final int NODE7_LEDS[] = {75,75,75,75,60,60,60,60,90};
-		
-	Node node1, node2, node3, node4, node5, node6, node7;
-
-	
-	Pavillon scp;
-
-	//Variables for GUI
 	ControlP5 cp5;
+	
+	public static void main(String args[]) {
+	    PApplet.main(new String[] { "--present", "ProcessingMain" });
+	  }
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	Node node1 = new Node(this, new int[]{0,1});
+	Node node2 = new Node(this, new int[]{0,1});
+	Node node3 = new Node(this, new int[]{0,1});
+	Node node4 = new Node(this, new int[]{0,1});
+	Node node5 = new Node(this, new int[]{0,1});
+	Node node6 = new Node(this, new int[]{0,1});
+	Node node7 = new Node(this, new int[]{0,1});
+
+	private PGraphics pg, pg2;
+
+
+	
+	int hue1=255;
+	int hue2=255;
+	int hue3=255;
+
+	private PImage img;
 
 	//Animation Stuff
 	private int xpos=0;
@@ -43,25 +48,27 @@ public class ProcessingMain extends PApplet {
 	private int pixel_pos = -20;
 	private SpreadC[] sc=new SpreadC[num];
 	private int pixel_posy = -12;
-	private PGraphics pg, pg2;
+
+
 	private float pixel_x=0;
-	int hue1=255;
-	int hue2=255;
-	int hue3=255;
-		
-	DijkstraPaint dp;
 
-	//Initiate as Application
-	public static void main(String args[]) {
-	    PApplet.main(new String[] { "--present", "ProcessingMain" });
-	  }
+	private final String IP = "224.1.1.1";
+	private final byte CONTROLLER_ID_1 = 4;
+	private final byte CONTROLLER_ID_2 = 4;
+	private Pavillon scp;
 
+
+
+
+
+
+	
 	public void setup() {
 		
 		size(1200,800);
 		
 		
-		//Init GUI with Textfields, Buttons
+		//ControlP5
 		cp5 = new ControlP5(this);
 
 		cp5.addTextfield("IP")
@@ -73,17 +80,8 @@ public class ProcessingMain extends PApplet {
 		   .setText(IP);
 		;
 		
-		cp5.addTextfield("PORT")
-		   .setPosition(70,10)
-		   .setSize(30,15)
-		   .setFocus(true)
-		   .setColor(color(255,255,255))
-		   .setColorCaptionLabel(color(0,0,0))
-		   .setText(Integer.toString(PORT));
-		;
-		
 		cp5.addTextfield("ID-1")
-		   .setPosition(110,10)
+		   .setPosition(70,10)
 		   .setSize(20,15)
 		   .setFocus(true)
 		   .setColor(color(255,255,255))
@@ -92,7 +90,7 @@ public class ProcessingMain extends PApplet {
 		;
 		
 		cp5.addTextfield("ID-2")
-		   .setPosition(140,10)
+		   .setPosition(100,10)
 		   .setSize(20,15)
 		   .setFocus(true)
 		   .setColor(color(255,255,255))
@@ -102,7 +100,7 @@ public class ProcessingMain extends PApplet {
 		
 		cp5.addButton("OK")
 		   .setValue(0)
-		   .setPosition(170,10)
+		   .setPosition(130,10)
 		   .setSize(20,15)
 		;
 		
@@ -112,34 +110,42 @@ public class ProcessingMain extends PApplet {
 			    random(255), random(255), random(255));
 		}
 		
+		frameRate(20);
 		
 
 		pg = createGraphics(12, 5);
 		pg2 = createGraphics(12, 5);
 
 		
-		node1 = new Node(this, new int[]{0,1});
-		node2 = new Node(this, new int[]{0,1});
-		node3 = new Node(this, new int[]{0,1});
-		node4 = new Node(this, new int[]{0,1});
-		node5 = new Node(this, new int[]{0,1});
-		node6 = new Node(this, new int[]{0,1});
-		node7 = new Node(this, new int[]{0,1});
+		int node1_leds[] = {90,60,75,60,60,75,60,75};
+		int node2_leds[] = {75,75,75,75,60,60,75,75,60,90};
+		int node3_leds[] = {75,75,75,60,90,75,75,60,75,75,75};
+		int node4_leds[] = {60,75,60,75,60,75,75,60};
+		int node5_leds[] = {60,90,75,60,75,75,75,90,75,75,60};
+		int node6_leds[] = {75,75,45,90,60,60,90,75,60};
+		int node7_leds[] = {75,75,75,75,60,60,60,60,90};
 
-		node1.add(NODE1_LEDS);
-		node2.add(NODE2_LEDS);
-		node3.add(NODE3_LEDS);
-		node4.add(NODE4_LEDS);
-		node5.add(NODE5_LEDS);
-		node6.add(NODE6_LEDS);
-		node7.add(NODE7_LEDS);
+
+		node1.add(node1_leds);
+		node2.add(node2_leds);
+		node3.add(node3_leds);
+		node4.add(node4_leds);
+		node5.add(node5_leds);
+		node6.add(node6_leds);
+		node7.add(node7_leds);
 		
-		scp = new Pavillon(IP, PORT, CONTROLLER_ID_1);
-		scp.add(node1, node2, node3, node4, node5, node6, node7);
+		String ip = "224.1.1.1";
+		scp = new Pavillon(ip, 5026, 4);
+		scp.add(node1);
+
+
+		/*m = new Movie(this,"/Users/mariushoggenmuller/Documents/BachelorArbeit/FinalLighterSketch/Videos/Neon Jogginghose.avi");
+		m.loop();*/
+				
+		/*img = loadImage("../Images/bg_small.png");
+		img.resize(12, 5);*/
 		
-		dp = new DijkstraPaint();
-		dp.set();
-		
+
 	}
 
 	public void draw() {
@@ -154,12 +160,12 @@ public class ProcessingMain extends PApplet {
 		    xpos = -durchmesser;
 		  }
 
-		  int i=0;
-		  for(Nozzle nozzle : scp.nozzleList){  
+ 
+		  for(int i=0; i<1; i++){  
 			
-			//System.out.println(i);
-			pg = nozzle.sysA;
-		    //System.out.println(i);
+			System.out.println(i);
+			pg = node1.nozzleList.get(i).sysA;
+		    System.out.println(i);
 		   // PImage img1 = pg.get(0, 0, pg.width, pg.height);
 		    //image(img1, 0, 0);
 		    
@@ -170,7 +176,7 @@ public class ProcessingMain extends PApplet {
 			//Background-Gradient
 			for(int ix=0; ix<14; ix++){
 			pg.colorMode(HSB);
-			pg.fill(60+50+2*ix+i,200,150,frameCount%255-120);
+			pg.fill(60+50+2*ix+10*i,200,150,frameCount%255-120);
 			pg.noStroke();
 			pg.rect(ix, 0, 1, 5);
 			}
@@ -201,7 +207,7 @@ public class ProcessingMain extends PApplet {
 			pg.rect(10, 0, 2, 5);*/
 			
 		  //New
-			/*for(int ii=0; ii<6; ii++){
+			for(int ii=0; ii<6; ii++){
 				pg.fill(120,220,80,20*ii);
 				pg.noStroke();
 				pg.rect(pixel_posy+ii, 0, 1, 5);
@@ -210,7 +216,7 @@ public class ProcessingMain extends PApplet {
 				pg.fill(100,220,80,100-20*ii);
 				pg.noStroke();
 				pg.rect(pixel_posy+ii+6, 0, 1, 5);
-			}*/
+			}
 			
 		    
 		    if(frameCount%30==0){
@@ -234,9 +240,6 @@ public class ProcessingMain extends PApplet {
 		    
 		    pg2.endDraw();
 		    
-			dp.paint();
-
-		    i++;
 		    
 		    
 		   }
@@ -287,21 +290,7 @@ public class ProcessingMain extends PApplet {
 	/*public void movieEvent(Movie m) {
 		m.read();
 	}*/
-	
-	@SuppressWarnings("deprecation")
-	public void controlEvent(ControlEvent theEvent) {
-		  println(theEvent.controller().name());
-		  
-		}
 
-		// function buttonA will receive changes from 
-		// controller with name buttonA
-		public void OK(int theValue) {
-		  println("a button event from buttonA: "+theValue);
-		  scp.setIP_ADRESS(cp5.get(Textfield.class,"IP").getText());
-		  scp.setPORT(Integer.parseInt(cp5.get(Textfield.class,"PORT").getText()));
-		  scp.setID(Integer.parseInt(cp5.get(Textfield.class,"ID-1").getText()));
-		}
 
 
 }

@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 
 public class Pavillon {
-	
-	private final String IP_ADRESS;
-	private final int PORT;
-	private final byte ID;
+
+	private String IP_ADRESS;
+	private int PORT;
+	private int ID;
 
 	private static byte port_map[] =
 		{1, 1, 1, 1, 2, 2, 2, 2,
@@ -23,11 +23,34 @@ public class Pavillon {
 	private InetAddress dest;
 	private MulticastSocket socket;
 
+	public String getIP_ADRESS() {
+		return IP_ADRESS;
+	}
+	
+	public void setIP_ADRESS(String ip) {
+		IP_ADRESS = ip;
+	}
+	
+	public int getPORT() {
+		return PORT;
+	}
+	
+	public void setPORT(int port) {
+		PORT = port;
+	}
+
+	public int getID() {
+		return ID;
+	}
+	
+	public void setID(int id) {
+		ID = id;
+	}
 	
 	public Pavillon(String ip, int i, int j) {
 		IP_ADRESS = ip;
 		PORT = i;
-		ID = (byte)j;
+		ID = j;
 		
 		try {
 			socket = new MulticastSocket();
@@ -37,9 +60,11 @@ public class Pavillon {
 		}
 	}
 	
-	public void add(Node node){
-		for(int i=0; i<node.nozzleList.size(); i++){
-		nozzleList.add(node.nozzleList.get(i));
+	public void add(Node... nodes){
+		for(Node node : nodes){
+		  for(int i=0; i<node.nozzleList.size(); i++){
+		    nozzleList.add(node.nozzleList.get(i));
+		  }
 		}
 	}
 
@@ -98,10 +123,13 @@ public class Pavillon {
 		}
         dp.setAddress(dest);
         
+        System.out.println("SEND-TO-ADRESS: "+dp.getAddress());
+        System.out.println("SEND-TO-PORT: "+dp.getPort());
+        
         //p.delay(50);
         
         for(int k=0; k<data.length; k++){
-			System.out.println("DATA: "+i+" "+k+" "+data[k]);
+			//System.out.println("DATA: "+i+" "+k+" "+data[k]);
 		}
 
         try {

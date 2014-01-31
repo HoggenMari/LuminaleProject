@@ -5,7 +5,7 @@ public class DijkstraPaint {
 	Vertex a1, b1, c1, d1, e1, f1, g1, h1;
 
 	public DijkstraPaint() {
-		
+
 	}
 	
 	public void set(){
@@ -55,13 +55,12 @@ public class DijkstraPaint {
 	}
 	
 	public void paint(){
-	  Vertex[] vertices = { a1, b1, c1, d1, e1, f1, g1, h1 };
+	  Vertex v = h1;
       Dijkstra.computePaths(a1);
-      for (Vertex v : vertices)
-      {
-    	System.out.println("Distance to " + v + ": " + v.minDistance);
-    	List<Vertex> path = Dijkstra.getShortestPathTo(v);
-    	System.out.println("Path: " + path);
-	  }
+
+      //System.out.println("Distance to " + v + ": " + v.minDistance);
+      List<Vertex> path = Dijkstra.getShortestPathTo(v);
+      //System.out.println("Path: " + path);
+	  
 	}
 }

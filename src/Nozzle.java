@@ -104,9 +104,6 @@ public class Nozzle {
 			}
 		}
 		
-		for(byte b : data) {
-			//System.out.println("Data: "+b);
-		}
 	}
 	
 	
