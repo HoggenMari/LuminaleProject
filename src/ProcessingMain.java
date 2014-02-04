@@ -128,6 +128,7 @@ public class ProcessingMain extends PApplet {
 	public void draw() {
 		  background(255);
 
+		  scp.breadthFirstSearch(scp.nozzleList.get(0), scp.nozzleList.get(10));
 		  //System.out.println(frameRate);
 		  
 		  //Animate SystemA

@@ -5,6 +5,7 @@ import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -28,26 +29,24 @@ public class Pavillon {
 		 7, 7, 7, 7, 8, 8, 8, 8, -1};
 	
 	private static byte adj_matrix1[][] =
-		{ { 0, 1, 1, 1, 1, 1, 0, 0 }, 
-		  { 1, 0, 1, 0, 0, 1, 1, 0 }, 
-		  { 1, 1, 0, 1, 0, 0, 1, 1 },
-		  { 1, 0, 1, 0, 1, 0, 0, 1 },
-		  { 1, 0, 0, 1, 0, 1, 0, 0 },
-		  { 1, 1, 0, 0, 1, 0, 0, 1 },
-		  { 0, 1, 1, 0, 0, 0, 0, 1 },
-		  { 0, 0, 1, 1, 1, 1, 1, 0 }};
-	
-	private static byte adj_matrix2[][] =
-		{ { 0, 1, 1, 1, 1, 0, 1, 0, 0, 0 }, 
-		  { 1, 0, 1, 1, 0, 1, 0, 1, 0, 0 }, 
-		  { 1, 1, 0, 0, 0, 1, 1, 1, 1, 0 },
-		  { 1, 1, 0, 0, 1, 1, 0, 0, 0, 1 },
-		  { 1, 0, 0, 1, 0, 0, 1, 0, 0, 1 },
-		  { 0, 1, 0, 1, 0, 0, 0, 1, 0, 1 },
-		  { 1, 0, 1, 0, 1, 0, 0, 0, 1, 1 },
-		  { 0, 1, 1, 0, 0, 1, 0, 0, 1, 1 },
-		  { 0, 0, 1, 0, 0, 0, 1, 1, 0, 1 },
-		  { 0, 0, 0, 1, 1, 1, 1, 1, 1, 1 }};
+		{ { 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
+		  { 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
+		  { 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+		  { 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+		  { 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+		  { 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
+		  { 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+		  { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+		  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0 }, 
+		  { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0 }, 
+		  { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0 },
+		  { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1 },
+		  { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1 },
+		  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1 },
+		  { 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1 },
+		  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1 },
+		  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1 },
+		  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1 }};
 	
 	ArrayList<Nozzle> nozzleList = new ArrayList<Nozzle>();
 	private InetAddress dest;
@@ -78,6 +77,65 @@ public class Pavillon {
 		ID = id;
 	}
 	
+	public void setAdj() {
+		for(int i=0; i < adj_matrix1.length; i++) {
+			nozzleList.get(i).setID(i);
+		}
+		
+		for(int i=0; i < adj_matrix1.length; i++) {
+			for(int j=0; j < adj_matrix1[i].length; j++) {
+				if(adj_matrix1[i][j] > 0) {
+					nozzleList.get(i).neighbour.add(nozzleList.get(j));
+				}
+			}
+		}
+	}
+
+	public void resetMarked() {
+		for(Nozzle n : nozzleList) {
+			n.marked = false;
+		}
+	}
+
+	public void breadthFirstSearch(Nozzle start, Nozzle target) {
+		String weg = "";
+		resetMarked();
+		int[] predecessor = new int[nozzleList.size()];
+		for(int i=0; i<nozzleList.size(); i++){
+			predecessor[i] = -1;
+		}
+		predecessor[start.id] = start.id;
+		LinkedList<Nozzle> queue = new LinkedList<Nozzle>();
+		start.marked = true;
+		queue.add(start);
+		boolean found = false;
+		while(!queue.isEmpty() && !found) {
+			Nozzle kq = queue.removeFirst();
+			System.out.println(kq.id);
+			for(Nozzle n : kq.neighbour) {
+				if(!n.marked) {
+					predecessor[n.id] = kq.id;
+					n.marked = true;
+					if(n.id==target.id) {
+						found = true;
+					}
+					queue.add(n);
+				}
+			}
+		}
+		if (queue.isEmpty()) {
+			weg = "kein Weg";
+		}else{
+			int j = target.id;
+			do{
+				weg = "->"+j+weg;
+				j = predecessor[j];
+			} while (j != start.id);
+		weg = "Weg gefunden: "+start.id+weg;
+		}
+		System.out.println(weg);
+	}
+	
 	public Pavillon(PApplet parent, String ip, int i, int j) {
 		IP_ADRESS = ip;
 		PORT = i;
@@ -92,7 +150,6 @@ public class Pavillon {
 		}
 	}
 	
-	
 	public void add(Node... nodes){
 		for(Node node : nodes){
 		  for(int i=0; i<node.nozzleList.size(); i++){
@@ -100,78 +157,7 @@ public class Pavillon {
 		  }
 		}
 	}
-	
-	
-    public List<Nozzle> computePaths(Nozzle source, Nozzle target)
-    {
-        source.minDistance = 0.;
-        //PriorityQueue<Nozzle> vertexQueue = new PriorityQueue<Nozzle>();
-        vertexQueue.clear();
-      	vertexQueue.add(source);
-
-	while (!vertexQueue.isEmpty()) {
-	    Nozzle u = vertexQueue.poll();
-
-            // Visit each edge exiting u
-            for (Edge e : u.adjacencies)
-            {
-                Nozzle v = e.target;
-                double weight = e.weight;
-                double distanceThroughU = u.minDistance + weight;
-		if (distanceThroughU < v.minDistance) {
-		    vertexQueue.remove(v);
-		    v.minDistance = distanceThroughU ;
-		    v.previous = u;
-		    vertexQueue.add(v);
-		}
-            }
-        }
-	//List<Nozzle> path = new ArrayList<Nozzle>();
-	path.clear();
-    for (Nozzle vertex = target; vertex != null; vertex = vertex.previous)
-        path.add(vertex);
-    Collections.reverse(path);
-    return path;
-	
-    }
-    
-    public List<Nozzle> getShortestPathTo(Nozzle target)
-    {
-        List<Nozzle> path = new ArrayList<Nozzle>();
-        for (Nozzle vertex = target; vertex != null; vertex = vertex.previous)
-            path.add(vertex);
-        Collections.reverse(path);
-        return path;
-    }
-    
-	
-	public void setAdj(){
-		for (int i = 0; i < adj_matrix1.length; i++){
-		  for (int j = 0; j < adj_matrix1[i].length; j++){
-			//nozzleList.get(i).adjacencies.add(new Edge());
-			if(adj_matrix1[i][j]>0){
-			  nozzleList.get(i).adjacencies.add(new Edge(nozzleList.get(j),1));
-		      System.out.println(adj_matrix1[i][j]);
-			}
-		  }
-		}
-		
-		
-		/*for(Nozzle nz : nozzleList){
-			nz.compareTo(nozzleList.get(0));
-		}*/
-		
-		//Nozzle[] nozzles = { nozzleList.get(0) };
-		//List<Nozzle> path = computePaths(nozzleList.get(0), nozzleList.get(7));
-        //for (Nozzle v : nozzleList)
-        //for(int i=0; i<8; i++)
-	//{
-	    //System.out.println("Distance to " + nozzleList.get(0) + ": " + nozzleList.get(7).minDistance);
-	    //List<Nozzle> path = getShortestPathTo(nozzleList.get(i));
-	    //System.out.println("Path: " + path);
-	//}
-	}
-
+	    
 	public void send() {
 		byte[] data = new byte[1472];
 		

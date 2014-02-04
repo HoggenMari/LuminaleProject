@@ -3,14 +3,10 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import processing.core.PImage;
 
 
-public class Nozzle implements Comparable<Nozzle>{
+public class Nozzle {
 	
-    public ArrayList<Edge> adjacencies = new ArrayList<Edge>();
-    public double minDistance = Double.POSITIVE_INFINITY;
-    public Nozzle previous;
 
 	public static final int TYPE1 = 0;
 	public static final int TYPE2 = 1;
@@ -24,20 +20,19 @@ public class Nozzle implements Comparable<Nozzle>{
 	
 	public byte data[];
 
-
-	private PImage image;
-	private int id;
-
 	private int widthA, heightA;
 	private int widthB, heightB;
 
 	public PGraphics sysA, sysB;
 	public int ledsTotal;
+	
+	public boolean marked;
+	public int id;
+	public ArrayList<Nozzle> neighbour= new ArrayList<Nozzle>();
 
 
 	public Nozzle(PApplet p, int type) {
 		this.p = p;
-		this.id = id;
 		this.heightA = HEIGHT_A;
 		this.heightB = HEIGHT_B;
 		if(type==90){
@@ -74,6 +69,10 @@ public class Nozzle implements Comparable<Nozzle>{
 		}
 		this.data = new byte[((widthA)*(heightA))*3+((widthB)*(heightB)*3)];
 
+	}
+	
+	void setID(int id) {
+		this.id = id;
 	}
 	
 	void update() {
@@ -114,7 +113,6 @@ public class Nozzle implements Comparable<Nozzle>{
 		
 	}
 	
-	
 	void drawOnGui(int pos_x, int pos_y) {
 		for (int ix = 0; ix < widthA; ix++) {
 			for (int iy = 0; iy < heightA; iy = iy + 1) {
@@ -137,20 +135,5 @@ public class Nozzle implements Comparable<Nozzle>{
 			}
 		}
 	}
-
-	@Override
-	public int compareTo(Nozzle other) {
-        return Double.compare(minDistance, other.minDistance);
-	}
-}
-
-class Edge
-{
-    public final Nozzle target;
-    public final double weight;
-    public Edge(Nozzle argTarget, double argWeight) { 
-    	target = argTarget; 
-    	weight = argWeight; 
-    }
     
 }
