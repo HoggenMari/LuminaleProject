@@ -1,5 +1,5 @@
 
-import java.io.IOException;
+import java.util.List;
 
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
@@ -48,8 +48,18 @@ public class ProcessingMain extends PApplet {
 	int hue1=255;
 	int hue2=255;
 	int hue3=255;
+
+	private int zähler;
+
+	private boolean next;
+
+	private int fade;
 		
-	DijkstraPaint dp;
+	List<Nozzle> path;
+
+	private int color;
+	
+	//DijkstraPaint dp;
 
 	//Initiate as Application
 	public static void main(String args[]) {
@@ -58,8 +68,10 @@ public class ProcessingMain extends PApplet {
 
 	public void setup() {
 		
+		
 		size(1200,800);
 		
+		//frameRate(10);
 		
 		//Init GUI with Textfields, Buttons
 		cp5 = new ControlP5(this);
@@ -67,7 +79,6 @@ public class ProcessingMain extends PApplet {
 		cp5.addTextfield("IP")
 		   .setPosition(10,10)
 		   .setSize(50,15)
-		   .setFocus(true)
 		   .setColor(color(255,255,255))
 		   .setColorCaptionLabel(color(0,0,0))
 		   .setText(IP);
@@ -76,7 +87,6 @@ public class ProcessingMain extends PApplet {
 		cp5.addTextfield("PORT")
 		   .setPosition(70,10)
 		   .setSize(30,15)
-		   .setFocus(true)
 		   .setColor(color(255,255,255))
 		   .setColorCaptionLabel(color(0,0,0))
 		   .setText(Integer.toString(PORT));
@@ -85,7 +95,6 @@ public class ProcessingMain extends PApplet {
 		cp5.addTextfield("ID-1")
 		   .setPosition(110,10)
 		   .setSize(20,15)
-		   .setFocus(true)
 		   .setColor(color(255,255,255))
 		   .setColorCaptionLabel(color(0,0,0))
 		   .setText(Integer.toString(CONTROLLER_ID_1));
@@ -94,14 +103,12 @@ public class ProcessingMain extends PApplet {
 		cp5.addTextfield("ID-2")
 		   .setPosition(140,10)
 		   .setSize(20,15)
-		   .setFocus(true)
 		   .setColor(color(255,255,255))
 		   .setColorCaptionLabel(color(0,0,0))
 		   .setText(Integer.toString(CONTROLLER_ID_2));
 		;
 		
 		cp5.addButton("OK")
-		   .setValue(0)
 		   .setPosition(170,10)
 		   .setSize(20,15)
 		;
@@ -118,13 +125,13 @@ public class ProcessingMain extends PApplet {
 		pg2 = createGraphics(12, 5);
 
 		
-		node1 = new Node(this, new int[]{0,1});
-		node2 = new Node(this, new int[]{0,1});
-		node3 = new Node(this, new int[]{0,1});
-		node4 = new Node(this, new int[]{0,1});
-		node5 = new Node(this, new int[]{0,1});
-		node6 = new Node(this, new int[]{0,1});
-		node7 = new Node(this, new int[]{0,1});
+		node1 = new Node(this);
+		node2 = new Node(this);
+		node3 = new Node(this);
+		node4 = new Node(this);
+		node5 = new Node(this);
+		node6 = new Node(this);
+		node7 = new Node(this);
 
 		node1.add(NODE1_LEDS);
 		node2.add(NODE2_LEDS);
@@ -136,25 +143,109 @@ public class ProcessingMain extends PApplet {
 		
 		scp = new Pavillon(IP, PORT, CONTROLLER_ID_1);
 		scp.add(node1, node2, node3, node4, node5, node6, node7);
+		scp.setAdj();
 		
-		dp = new DijkstraPaint();
-		dp.set();
+		zähler=0;
+		next=false;
+		fade=1;
+		path = scp.computePaths(scp.nozzleList.get(0), scp.nozzleList.get(6));
+		
+		//dp = new DijkstraPaint();
+		//dp.set();
+		color = 255;
 		
 	}
 
 	public void draw() {
 		  background(255);
 
-		  sc[0].update();
-		  sc[0].display(pg2);
+			System.out.println(frameRate);
+
+		  for(Nozzle nozzle : scp.nozzleList) {
+			  pg = nozzle.sysA;
+			  pg.beginDraw();
+			  pg.background(0);
+			  pg.endDraw();
+		  }
+		  //sc[0].update();
+		  //sc[0].display(pg2);
 		   
 		  int durchmesser=5;
 
 		  if (xpos > pg.width + durchmesser) {
 		    xpos = -durchmesser;
 		  }
-
-		  int i=0;
+		  
+		  
+		  
+		  
+		  //List<Nozzle> path = scp.computePaths(scp.nozzleList.get((int)random(0,7)), scp.nozzleList.get((int)random(0,7)));
+		  
+		  System.out.println(path);
+		  
+		  PGraphics pg5 = createGraphics(260,50,JAVA2D);
+		  
+		  
+		  pg5 = path.get(zähler).sysA;
+		  pg5.beginDraw();
+		  //pg5.background(100);
+		  pg5.noStroke();
+		  pg5.colorMode(HSB);
+		  pg5.fill(color,100,100,fade);
+		  pg5.rect(0, 0, pg5.width, pg5.height);
+		  pg5.endDraw();
+		  image(pg5, 9, 30); 
+		  
+		  if(frameCount%4==0){
+		  if(fade<255){
+			  //next = true;
+			  fade = (int) (fade + fade*1.04);
+		  } else next = true;
+		  }
+		  
+		  if(next){
+			  zähler++;
+			  fade = 1;
+			  next = !next;
+		  }
+		  if(zähler>=path.size()){
+			  System.out.println("GO HERE 1");
+			  zähler=0;
+			  path.clear();
+			  System.out.println(path.size());
+			  path = scp.computePaths(scp.nozzleList.get((int)random(0,17)), scp.nozzleList.get((int)random(0,17)));
+			  while(path.size()<2){
+				System.out.println("GO HERE 1");
+				path.clear();
+				path = scp.computePaths(scp.nozzleList.get((int)random(0,17)), scp.nozzleList.get((int)random(0,17)));
+			  };
+			  color=(int)random(0,255);
+		  }
+		  System.out.println(zähler);
+		  System.out.println(path.size());
+			  /*pg5.beginDraw();
+			  pg5.background(100);
+			  pg5.fill(255,0,255);
+			  pg5.rect(0, 0, pg5.width, pg5.height);
+			  pg5.endDraw();
+			  image(pg5, 9, 30); 
+			  image(pg5, 51, 30);*/
+			  
+			  //PImage img1 = pg5.get(0, 0, pg5.width, pg5.height);
+			  //image(img1,650,650);
+			  
+		  node1.drawOnGui(10, 50);
+		  node2.drawOnGui(150, 50);
+		  node3.drawOnGui(300, 50);
+		  node4.drawOnGui(450, 50);
+		  node5.drawOnGui(600, 50);
+		  node6.drawOnGui(750, 50);
+		  node7.drawOnGui(900, 50);
+		  
+		  scp.send();
+		  
+		  
+		  /*int i=0;
 		  for(Nozzle nozzle : scp.nozzleList){  
 			
 			//System.out.println(i);
@@ -170,11 +261,11 @@ public class ProcessingMain extends PApplet {
 			//Background-Gradient
 			for(int ix=0; ix<14; ix++){
 			pg.colorMode(HSB);
-			pg.fill(60+50+2*ix+i,200,150,frameCount%255-120);
+			pg.fill(60+50+2*ix+i*+frameCount%56,200,150,frameCount%255-0);
 			pg.noStroke();
 			pg.rect(ix, 0, 1, 5);
 			}
-			pg.colorMode(RGB);
+			pg.colorMode(RGB);*/
 			
 			/*pg.fill(frameCount,255,255,0);
 			pg.noStroke();
@@ -213,7 +304,7 @@ public class ProcessingMain extends PApplet {
 			}*/
 			
 		    
-		    if(frameCount%30==0){
+		    /*if(frameCount%30==0){
 		    pixel_x++;
 		    }
 		    
@@ -234,7 +325,7 @@ public class ProcessingMain extends PApplet {
 		    
 		    pg2.endDraw();
 		    
-			dp.paint();
+			//dp.paint();
 
 		    i++;
 		    
@@ -274,6 +365,7 @@ public class ProcessingMain extends PApplet {
 			node7.drawOnGui(900, 50);
 
 			scp.send();
+			scp.setAdj();*/
 			/*try {
 				node1.sendNode(CONTROLLER_ID_1);
 			} catch (IOException e) {

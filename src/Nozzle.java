@@ -1,10 +1,16 @@
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 
 
-public class Nozzle {
+public class Nozzle implements Comparable<Nozzle>{
+	
+    public ArrayList<Edge> adjacencies = new ArrayList<Edge>();
+    public double minDistance = Double.POSITIVE_INFINITY;
+    public Nozzle previous;
 
 	public static final int TYPE1 = 0;
 	public static final int TYPE2 = 1;
@@ -20,6 +26,7 @@ public class Nozzle {
 
 
 	private PImage image;
+	private int id;
 
 	private int widthA, heightA;
 	private int widthB, heightB;
@@ -30,6 +37,7 @@ public class Nozzle {
 
 	public Nozzle(PApplet p, int type) {
 		this.p = p;
+		this.id = id;
 		this.heightA = HEIGHT_A;
 		this.heightB = HEIGHT_B;
 		if(type==90){
@@ -129,4 +137,20 @@ public class Nozzle {
 			}
 		}
 	}
+
+	@Override
+	public int compareTo(Nozzle other) {
+        return Double.compare(minDistance, other.minDistance);
+	}
+}
+
+class Edge
+{
+    public final Nozzle target;
+    public final double weight;
+    public Edge(Nozzle argTarget, double argWeight) { 
+    	target = argTarget; 
+    	weight = argWeight; 
+    }
+    
 }
