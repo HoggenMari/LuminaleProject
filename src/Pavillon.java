@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import processing.core.PApplet;
+
 
 
 public class Pavillon {
@@ -23,7 +25,7 @@ public class Pavillon {
 		{1, 1, 1, 1, 2, 2, 2, 2,
 		 3, 3, 3, 3, 3, 4, 4, 4, 4, 4,
 		 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6,
-		 7, 7, 7, 7, 8, 8, 8, 8};
+		 7, 7, 7, 7, 8, 8, 8, 8, -1};
 	
 	private static byte adj_matrix1[][] =
 		{ { 0, 1, 1, 1, 1, 1, 0, 0 }, 
@@ -50,6 +52,7 @@ public class Pavillon {
 	ArrayList<Nozzle> nozzleList = new ArrayList<Nozzle>();
 	private InetAddress dest;
 	private MulticastSocket socket;
+	private PApplet p;
 
 	public String getIP_ADRESS() {
 		return IP_ADRESS;
@@ -75,10 +78,11 @@ public class Pavillon {
 		ID = id;
 	}
 	
-	public Pavillon(String ip, int i, int j) {
+	public Pavillon(PApplet parent, String ip, int i, int j) {
 		IP_ADRESS = ip;
 		PORT = i;
 		ID = j;
+		p = parent;
 		
 		try {
 			socket = new MulticastSocket();
@@ -173,7 +177,7 @@ public class Pavillon {
 		
 		int nozzle_count = 0;
 
-		for(int i=0; i<2; i++){
+		for(int i=0; i<8; i++){
 		int dataIndex = 0;
 
 		data[dataIndex++] = 'Y';
@@ -207,10 +211,11 @@ public class Pavillon {
 			}
 			
 			nozzle_count++;
+			System.out.println(nozzle_count);
 		}while(port_map[nozzle_count]==i+1);
 		
 		for(int j=dataIndex; j<1458; j++){
-			data[dataIndex++]= (byte) 40;
+			data[dataIndex++]= (byte) 0;
 		}
 				
 		DatagramPacket dp = new DatagramPacket(data, data.length);
@@ -228,9 +233,10 @@ public class Pavillon {
         
         //p.delay(50);
         
-        for(int k=0; k<data.length; k++){
-			//System.out.println("DATA: "+i+" "+k+" "+data[k]);
-		}
+        //for(int k=0; k<data.length; k++){
+			p.delay(1);
+        	//System.out.println("DATA: "+i+" "+k+" "+data[k]);
+		//}
 
         try {
           socket.send(dp);
