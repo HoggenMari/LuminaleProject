@@ -41,6 +41,8 @@ public class ProcessingMain extends PApplet {
 
 	private int counter1;
 	private int counter2;
+
+	private int counter3;
 	
 	//Initiate as Application
 	public static void main(String args[]) {
@@ -122,6 +124,7 @@ public class ProcessingMain extends PApplet {
 		
 		counter1=0;
 		counter2=0;
+	
 
 	}
 
@@ -131,10 +134,22 @@ public class ProcessingMain extends PApplet {
 		  scp.breadthFirstSearch(scp.nozzleList.get(0), scp.nozzleList.get(10));
 		  //System.out.println(frameRate);
 		  
-		  //Animate SystemA
+		  /*//for(Nozzle n : scp.nozzleList) {
+			  pg = scp.nozzleList.get(counter1).sysA;
+			  pg.beginDraw();
+			  pg.background(0);
+			  pg.colorMode(HSB);
+			  for(int i=0; i<pg.height; i++) {
+			  pg.fill(42-5*i, 255-(frameCount%25)*10, 255);
+			  pg.rect(0, i, pg.width, 1);
+			  }
+			  pg.endDraw();
+		  //}*/
+		  
+		  /*//Animate SystemA
 		  pg = scp.nozzleList.get(counter1).sysA;
 		  pg.beginDraw();
-		  pg.background(0);
+		  //pg.background(0);
 		  for(int ix=0; ix<pg.width; ix++){
 			pg.colorMode(HSB);	
 			pg.fill(60+50+3*ix+counter1,255,255,(frameCount%25)*10);
@@ -148,8 +163,66 @@ public class ProcessingMain extends PApplet {
 		  }
 		  if(counter1>=scp.nozzleList.size()){
 			  counter1=0;
-		  }
-		  
+		  }*/
+			  
+			//Animate SystemB
+		  	  counter2 = -400+((frameCount%800)*1);
+			  if(counter2<=0){
+			  for(Nozzle nozzle : scp.nozzleList){
+				  pg2 = nozzle.sysA;
+				  pg2.beginDraw();
+				  pg2.colorMode(RGB);
+				  pg2.background(255);
+				  if(counter2<=-50){
+					  System.out.println("T1: "+(350-(counter2+400)));
+					  for(int ix=0; ix<pg2.height; ix++){
+							pg2.colorMode(HSB);	
+							pg2.fill(42-5*ix,350-(counter2+400),255,255);
+							pg2.noStroke();
+							pg2.rect(0, ix, pg.width, 1);
+					   }
+				  //pg2.background(counter2,0,0);
+				  }else {
+					  System.out.println("T2: "+(50+counter2));
+					  for(int ix=0; ix<pg2.height; ix++){
+							pg2.colorMode(HSB);	
+							pg2.fill(127-ix,50+counter2,255,100);
+							pg2.noStroke();
+							pg2.rect(0, ix, pg.width, 1);
+					   }
+				  }
+				  pg2.endDraw();
+			  }
+			  }else{
+			  //counter2 = (frameCount%100)*4;
+			  for(Nozzle nozzle : scp.nozzleList){
+				  pg2 = nozzle.sysA;
+				  pg2.beginDraw();
+				  pg2.colorMode(RGB);
+				  pg2.background(255);
+				  if(counter2<50){
+					  System.out.println("T3: "+(50-counter2));
+					  for(int ix=0; ix<pg2.height; ix++){
+							pg2.colorMode(HSB);	
+							pg2.fill(127-ix,50-counter2,255,100);
+							pg2.noStroke();
+							pg2.rect(0, ix, pg.width, 1);
+					   }
+				  //pg2.background(counter2,0,0);
+				  }else {
+					  System.out.println("T4: "+(-50+counter2));
+					  for(int ix=0; ix<pg2.height; ix++){
+							pg2.colorMode(HSB);	
+							pg2.fill(42-5*ix,-50+counter2,255,255);
+							pg2.noStroke();
+							pg2.rect(0, ix, pg.width, 1);
+					   }
+				  }
+				  pg2.endDraw();
+			  }
+			 }
+		     
+			  
 		  //Animate SystemB
 		  counter2 = (frameCount%80)*5;
 		  for(Nozzle nozzle : scp.nozzleList){

@@ -111,7 +111,7 @@ public class Pavillon {
 		boolean found = false;
 		while(!queue.isEmpty() && !found) {
 			Nozzle kq = queue.removeFirst();
-			System.out.println(kq.id);
+			//System.out.println(kq.id);
 			for(Nozzle n : kq.neighbour) {
 				if(!n.marked) {
 					predecessor[n.id] = kq.id;
@@ -133,7 +133,7 @@ public class Pavillon {
 			} while (j != start.id);
 		weg = "Weg gefunden: "+start.id+weg;
 		}
-		System.out.println(weg);
+		//System.out.println(weg);
 	}
 	
 	public Pavillon(PApplet parent, String ip, int i, int j) {
@@ -214,8 +214,8 @@ public class Pavillon {
 		}
         dp.setAddress(dest);
         
-        System.out.println("SEND-TO-ADRESS: "+dp.getAddress());
-        System.out.println("SEND-TO-PORT: "+dp.getPort());
+        //System.out.println("SEND-TO-ADRESS: "+dp.getAddress());
+        //System.out.println("SEND-TO-PORT: "+dp.getPort());
         
         //p.delay(50);
         
