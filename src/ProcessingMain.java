@@ -43,6 +43,8 @@ public class ProcessingMain extends PApplet {
 	private int counter2;
 
 	private int counter3;
+
+	private float y=0;
 	
 	//Initiate as Application
 	public static void main(String args[]) {
@@ -166,7 +168,7 @@ public class ProcessingMain extends PApplet {
 		  }*/
 			  
 			//Animate SystemB
-		  	  counter2 = -400+((frameCount%800)*1);
+		  	  /*counter2 = -400+((frameCount%100)*8);
 			  if(counter2<=0){
 			  for(Nozzle nozzle : scp.nozzleList){
 				  pg2 = nozzle.sysA;
@@ -186,7 +188,7 @@ public class ProcessingMain extends PApplet {
 					  System.out.println("T2: "+(50+counter2));
 					  for(int ix=0; ix<pg2.height; ix++){
 							pg2.colorMode(HSB);	
-							pg2.fill(127-ix,50+counter2,255,100);
+							pg2.fill(127-5*ix,50+counter2,255,100);
 							pg2.noStroke();
 							pg2.rect(0, ix, pg.width, 1);
 					   }
@@ -204,7 +206,7 @@ public class ProcessingMain extends PApplet {
 					  System.out.println("T3: "+(50-counter2));
 					  for(int ix=0; ix<pg2.height; ix++){
 							pg2.colorMode(HSB);	
-							pg2.fill(127-ix,50-counter2,255,100);
+							pg2.fill(127-5*ix,50-counter2,255,100);
 							pg2.noStroke();
 							pg2.rect(0, ix, pg.width, 1);
 					   }
@@ -220,18 +222,296 @@ public class ProcessingMain extends PApplet {
 				  }
 				  pg2.endDraw();
 			  }
+			 }*/
+			  
+			  
+			  
+				//Animate SystemB
+		  	  counter2 = -400+((frameCount%800)*1);
+		  	  int color1=32;
+		  	  int color2=150;
+		  	  int dimm=0; //(frameCount%300)/2;
+			  if(counter2<=0){
+			  for(Nozzle nozzle : scp.nozzleList){
+				  pg2 = nozzle.sysA;
+				  pg2.beginDraw();
+				  pg2.colorMode(RGB);
+				  pg2.background(255);
+				  if(counter2<=-200){
+					  System.out.println("T1: "+(350-(counter2+400)));
+					  for(int iy=0; iy<pg2.height; iy++){
+							pg2.colorMode(HSB);	
+							pg2.fill(color1-5*iy,200-(counter2+400),255,255);
+							pg2.noStroke();
+							pg2.rect(0, iy, pg.width, 1);
+					   }
+				  //pg2.background(counter2,0,0);
+				  }else {
+					  System.out.println("T2: "+(50+counter2));
+					  for(int iy=0; iy<pg2.height; iy++){
+							pg2.colorMode(HSB);	
+							pg2.fill(color2+5*iy,200+counter2,255,255);
+							pg2.noStroke();
+							pg2.rect(0, iy, pg.width, 1);
+							pg2.colorMode(RGB);	
+							pg2.fill(255,255,255,200-counter2);
+							pg2.noStroke();
+							pg2.rect(0, iy, pg.width, 1);
+					   }
+				  }
+				  pg2.colorMode(RGB);
+				  pg2.fill(0,0,0,dimm);
+				  pg2.noStroke();
+				  pg2.rect(0, 0, pg.width, pg.height);
+				  pg2.endDraw();
+				  
+				  for(int ix=0; ix<pg2.width; ix++){
+				  pg2.beginDraw();
+				  pg2.colorMode(RGB);
+				  pg2.fill(0,0,0,255);
+				  pg2.rect(ix,y,1,1);
+				  pg2.endDraw();
+				  }
+				  
+			  }
+			  }else{
+			  //counter2 = (frameCount%100)*4;
+			  for(Nozzle nozzle : scp.nozzleList){
+				  pg2 = nozzle.sysA;
+				  pg2.beginDraw();
+				  pg2.colorMode(RGB);
+				  pg2.background(0);
+				  if(counter2<200){
+					  System.out.println("T3: "+(50-counter2));
+					  for(int iy=0; iy<pg2.height; iy++){
+							pg2.colorMode(HSB);	
+							pg2.fill(color2+5*iy,200-counter2,255,255);
+							pg2.noStroke();
+							pg2.rect(0, iy, pg.width, 1);
+							pg2.colorMode(RGB);	
+							pg2.fill(255,255,255,200-counter2);
+							pg2.noStroke();
+							pg2.rect(0, iy, pg.width, 1);
+					   }
+				  //pg2.background(counter2,0,0);
+				  }else {
+					  System.out.println("T4: "+(-50+counter2));
+					  for(int iy=0; iy<pg2.height; iy++){
+							pg2.colorMode(HSB);	
+							pg2.fill(color1-5*iy,-200+counter2,255,255);
+							pg2.noStroke();
+							pg2.rect(0, iy, pg.width, 1);
+					   }
+				  }
+				  pg2.colorMode(RGB);
+				  pg2.fill(0,0,0,0);
+				  pg2.noStroke();
+				  pg2.rect(0, 0, pg.width, pg.height);
+				  pg2.endDraw();
+				  
+			  }
+			  
+			 }
+			  
+			  
+			  if(frameCount%5==0){
+				  y++;
+			  if(y>=5){
+				  y=0;
+			  }
+			  }
+				//Animate SystemB
+		  	  /*counter2 = -400+((frameCount%100)*8);
+		  	  int color1=42;
+		  	  int color2=127;
+		  	  int dimm=0; //(frameCount%300)/2;
+			  if(counter2<=0){
+			  for(Nozzle nozzle : scp.nozzleList){
+				  pg2 = nozzle.sysA;
+				  pg2.beginDraw();
+				  pg2.colorMode(RGB);
+				  pg2.background(255);
+				  if(counter2<=-200){
+					  System.out.println("T1: "+(350-(counter2+400)));
+					  for(int iy=0; iy<pg2.height; iy++){
+							pg2.colorMode(HSB);	
+							pg2.fill(color1-5*iy,200-(counter2+400),255,255);
+							pg2.noStroke();
+							pg2.rect(0, iy, 2, 1);
+							pg2.rect(4, iy, 2, 1);
+							pg2.rect(8, iy, 2, 1);
+							pg2.rect(12, iy, 2, 1);
+					   }
+				  //pg2.background(counter2,0,0);
+				  }else {
+					  System.out.println("T2: "+(50+counter2));
+					  for(int iy=0; iy<pg2.height; iy++){
+							pg2.colorMode(HSB);	
+							pg2.fill(color2-5*iy,200+counter2,255,255);
+							pg2.noStroke();
+							pg2.rect(0, iy, 2, 1);
+							pg2.rect(4, iy, 2, 1);
+							pg2.rect(8, iy, 2, 1);
+							pg2.rect(12, iy, 2, 1);
+							pg2.colorMode(RGB);	
+							pg2.fill(255,255,255,200-counter2);
+							pg2.noStroke();
+							pg2.rect(0, iy, 2, 1);
+							pg2.rect(4, iy, 2, 1);
+							pg2.rect(8, iy, 2, 1);
+							pg2.rect(12, iy, 2, 1);
+					   }
+				  }
+				  pg2.colorMode(RGB);
+				  pg2.fill(0,0,0,dimm);
+				  pg2.noStroke();
+				  pg2.rect(0, 0, pg.width, pg.height);
+				  pg2.endDraw();
+			  }
+			  }else{
+			  //counter2 = (frameCount%100)*4;
+			  for(Nozzle nozzle : scp.nozzleList){
+				  pg2 = nozzle.sysA;
+				  pg2.beginDraw();
+				  pg2.colorMode(RGB);
+				  pg2.background(0);
+				  if(counter2<200){
+					  System.out.println("T3: "+(50-counter2));
+					  for(int iy=0; iy<pg2.height; iy++){
+							pg2.colorMode(HSB);	
+							pg2.fill(color2-5*iy,200-counter2,255,255);
+							pg2.noStroke();
+							pg2.rect(0, iy, 2, 1);
+							pg2.rect(4, iy, 2, 1);
+							pg2.rect(8, iy, 2, 1);
+							pg2.rect(12, iy, 2, 1);
+							pg2.colorMode(RGB);	
+							pg2.fill(255,255,255,200-counter2);
+							pg2.noStroke();
+							pg2.rect(0, iy, 2, 1);
+							pg2.rect(4, iy, 2, 1);
+							pg2.rect(8, iy, 2, 1);
+							pg2.rect(12, iy, 2, 1);
+					   }
+				  //pg2.background(counter2,0,0);
+				  }else {
+					  System.out.println("T4: "+(-50+counter2));
+					  for(int iy=0; iy<pg2.height; iy++){
+							pg2.colorMode(HSB);	
+							pg2.fill(color1-5*iy,-200+counter2,255,255);
+							pg2.noStroke();
+							pg2.rect(0, iy, 2, 1);
+							pg2.rect(4, iy, 2, 1);
+							pg2.rect(8, iy, 2, 1);
+							pg2.rect(12, iy, 2, 1);
+					   }
+				  }
+				  pg2.colorMode(RGB);
+				  pg2.fill(0,0,0,dimm);
+				  pg2.noStroke();
+				  pg2.rect(0, 0, pg.width, pg.height);
+				  pg2.endDraw();
+			  }
 			 }
 		     
+			  if(counter2<=0){
+				  for(Nozzle nozzle : scp.nozzleList){
+					  pg2 = nozzle.sysA;
+					  pg2.beginDraw();
+					  pg2.colorMode(RGB);
+					  //pg2.background(0);
+					  if(counter2<=-200){
+						  System.out.println("T1: "+(350-(counter2+400)));
+						  for(int iy=0; iy<pg2.height; iy++){
+								pg2.colorMode(HSB);	
+								pg2.fill(color2-5*iy,200-(counter2+400),255,255);
+								pg2.noStroke();
+								pg2.rect(2, iy, 2, 1);
+								pg2.rect(6, iy, 2, 1);
+								pg2.rect(10, iy, 2, 1);
+								pg2.rect(14, iy, 2, 1);
+								pg2.colorMode(RGB);	
+								pg2.fill(255,255,255,200-(counter2+400));
+								pg2.noStroke();
+								pg2.rect(2, iy, 2, 1);
+								pg2.rect(6, iy, 2, 1);
+								pg2.rect(10, iy, 2, 1);
+								pg2.rect(14, iy, 2, 1);
+						   }
+					  //pg2.background(counter2,0,0);
+					  }else {
+						  System.out.println("T2: "+(50+counter2));
+						  for(int iy=0; iy<pg2.height; iy++){
+								pg2.colorMode(HSB);	
+								pg2.fill(color1-5*iy,200+counter2,255,255);
+								pg2.noStroke();
+								pg2.rect(2, iy, 2, 1);
+								pg2.rect(6, iy, 2, 1);
+								pg2.rect(10, iy, 2, 1);
+								pg2.rect(14, iy, 2, 1);
+						   }
+					  }
+					  pg2.colorMode(RGB);
+					  pg2.fill(0,0,0,dimm);
+					  pg2.noStroke();
+					  pg2.rect(0, 0, pg.width, pg.height);
+					  pg2.endDraw();
+				  }
+				  }else{
+				  //counter2 = (frameCount%100)*4;
+				  for(Nozzle nozzle : scp.nozzleList){
+					  pg2 = nozzle.sysA;
+					  pg2.beginDraw();
+					  pg2.colorMode(RGB);
+					  //pg2.background(0);
+					  if(counter2<200){
+						  System.out.println("T3: "+(50-counter2));
+						  for(int iy=0; iy<pg2.height; iy++){
+								pg2.colorMode(HSB);	
+								pg2.fill(color1-5*iy,200-counter2,255,255);
+								pg2.noStroke();
+								pg2.rect(2, iy, 2, 1);
+								pg2.rect(6, iy, 2, 1);
+								pg2.rect(10, iy, 2, 1);
+								pg2.rect(14, iy, 2, 1);
+						   }
+					  //pg2.background(counter2,0,0);
+					  }else {
+						  System.out.println("T4: "+(-50+counter2));
+						  for(int iy=0; iy<pg2.height; iy++){
+								pg2.colorMode(HSB);	
+								pg2.fill(color2-5*iy,-200+counter2,255,255);
+								pg2.noStroke();
+								pg2.rect(2, iy, 2, 1);
+								pg2.rect(6, iy, 2, 1);
+								pg2.rect(10, iy, 2, 1);
+								pg2.rect(14, iy, 2, 1);
+								pg2.colorMode(RGB);	
+								pg2.fill(255,255,255,counter2-200);
+								pg2.noStroke();
+								pg2.rect(2, iy, 2, 1);
+								pg2.rect(6, iy, 2, 1);
+								pg2.rect(10, iy, 2, 1);
+								pg2.rect(14, iy, 2, 1);
+						   }
+					  }
+					  pg2.colorMode(RGB);
+					  pg2.fill(0,0,0,dimm);
+					  pg2.noStroke();
+					  pg2.rect(0, 0, pg.width, pg.height);
+					  pg2.endDraw();
+				  }
+				 }*/
 			  
 		  //Animate SystemB
-		  counter2 = (frameCount%80)*5;
+		  counter2 = (frameCount%400);
 		  for(Nozzle nozzle : scp.nozzleList){
 			  pg2 = nozzle.sysB;
 			  pg2.beginDraw();
 			  pg2.colorMode(RGB);
 			  if(counter2<200){
-			  pg2.background(counter2,0,0);
-			  }else pg2.background(200+(200-counter2),0,0);
+			  pg2.background(counter2,counter2,counter2);
+			  }else pg2.background(200+(200-counter2),200+(200-counter2),200+(200-counter2));
 			  pg2.endDraw();
 		  }
 		  		  
