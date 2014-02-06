@@ -5,6 +5,9 @@
  */
 
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.Textfield;
@@ -45,6 +48,14 @@ public class ProcessingMain extends PApplet {
 	private int counter3;
 
 	private float y=0;
+
+	private boolean next;
+
+	private LinkedList<Nozzle> path;
+
+	private PGraphics pg_last;
+
+	private int color;
 	
 	//Initiate as Application
 	public static void main(String args[]) {
@@ -126,14 +137,51 @@ public class ProcessingMain extends PApplet {
 		
 		counter1=0;
 		counter2=0;
-	
+		
+		next=true;
+		path = scp.breadthFirstSearch(scp.nozzleList.get(0), scp.nozzleList.get(19));
+		
+		pg_last = createGraphics(12,5);
 
 	}
 
 	public void draw() {
 		  background(255);
 
-		  scp.breadthFirstSearch(scp.nozzleList.get(0), scp.nozzleList.get(10));
+		  color = frameCount%255;
+		  
+		  if(next){
+			  //System.out.println(path.size());
+			  if(path.size()==0){
+				  path = scp.breadthFirstSearch(scp.nozzleList.get(0), scp.nozzleList.get(30));
+			  }
+			  pg = path.removeLast().sysA;
+			  next = !next;
+		  }
+		  
+		  pg.beginDraw();
+		  pg.colorMode(HSB);
+		  pg.fill(color, 255, 255, (frameCount%25)*10);
+		  pg.noStroke();
+		  pg.rect(0, 0, pg.width, pg.height);
+		  pg.endDraw();
+		  
+		  pg_last.beginDraw();
+		  pg_last.colorMode(HSB);
+		  pg_last.background(0);
+		  pg_last.fill(color, 255, 255, 250-(frameCount%25)*10);
+		  //System.out.println(249-frameCount%25*10);
+		  pg_last.noStroke();
+		  pg_last.rect(0, 0, pg_last.width, pg_last.height);
+		  
+		  if(frameCount%25==0){
+			  next = true;
+			  pg_last.background(0);
+			  pg_last = pg;
+		  }
+		  
+		  pg_last.endDraw();
+
 		  //System.out.println(frameRate);
 		  
 		  /*//for(Nozzle n : scp.nozzleList) {
@@ -148,9 +196,9 @@ public class ProcessingMain extends PApplet {
 			  pg.endDraw();
 		  //}*/
 		  
-		  /*//Animate SystemA
-		  pg = scp.nozzleList.get(counter1).sysA;
-		  pg.beginDraw();
+		  //Animate SystemA
+		  //pg = scp.nozzleList.get(counter1).sysA;
+		  /*pg.beginDraw();
 		  //pg.background(0);
 		  for(int ix=0; ix<pg.width; ix++){
 			pg.colorMode(HSB);	
@@ -227,7 +275,7 @@ public class ProcessingMain extends PApplet {
 			  
 			  
 				//Animate SystemB
-		  	  counter2 = -400+((frameCount%800)*1);
+		  	  /*counter2 = -400+((frameCount%800)*1);
 		  	  int color1=32;
 		  	  int color2=150;
 		  	  int dimm=0; //(frameCount%300)/2;
@@ -238,7 +286,7 @@ public class ProcessingMain extends PApplet {
 				  pg2.colorMode(RGB);
 				  pg2.background(255);
 				  if(counter2<=-200){
-					  System.out.println("T1: "+(350-(counter2+400)));
+					  //System.out.println("T1: "+(350-(counter2+400)));
 					  for(int iy=0; iy<pg2.height; iy++){
 							pg2.colorMode(HSB);	
 							pg2.fill(color1-5*iy,200-(counter2+400),255,255);
@@ -247,7 +295,7 @@ public class ProcessingMain extends PApplet {
 					   }
 				  //pg2.background(counter2,0,0);
 				  }else {
-					  System.out.println("T2: "+(50+counter2));
+					  //System.out.println("T2: "+(50+counter2));
 					  for(int iy=0; iy<pg2.height; iy++){
 							pg2.colorMode(HSB);	
 							pg2.fill(color2+5*iy,200+counter2,255,255);
@@ -282,7 +330,7 @@ public class ProcessingMain extends PApplet {
 				  pg2.colorMode(RGB);
 				  pg2.background(0);
 				  if(counter2<200){
-					  System.out.println("T3: "+(50-counter2));
+					  //System.out.println("T3: "+(50-counter2));
 					  for(int iy=0; iy<pg2.height; iy++){
 							pg2.colorMode(HSB);	
 							pg2.fill(color2+5*iy,200-counter2,255,255);
@@ -295,7 +343,7 @@ public class ProcessingMain extends PApplet {
 					   }
 				  //pg2.background(counter2,0,0);
 				  }else {
-					  System.out.println("T4: "+(-50+counter2));
+					  //System.out.println("T4: "+(-50+counter2));
 					  for(int iy=0; iy<pg2.height; iy++){
 							pg2.colorMode(HSB);	
 							pg2.fill(color1-5*iy,-200+counter2,255,255);
