@@ -153,7 +153,16 @@ public class ProcessingMain extends PApplet {
 		  if(next){
 			  //System.out.println(path.size());
 			  if(path.size()==0){
-				  path = scp.breadthFirstSearch(scp.nozzleList.get(0), scp.nozzleList.get(30));
+				  int r1=0;
+				  int r2=0;
+				  do{
+				  r1 = (int)random(0,7);
+				  r2 = (int)random(48,65);
+				  }while(r1==r2);
+				  System.out.println(r1);
+				  System.out.println(r2);
+				  path = scp.breadthFirstSearch(scp.nozzleList.get(r1), scp.nozzleList.get(r2));
+				  color = 0;
 			  }
 			  pg = path.removeLast().sysA;
 			  next = !next;
@@ -161,7 +170,7 @@ public class ProcessingMain extends PApplet {
 		  
 		  pg.beginDraw();
 		  pg.colorMode(HSB);
-		  pg.fill(color, 255, 255, (frameCount%25)*10);
+		  pg.fill(color, 255, 255, (frameCount%5)*50);
 		  pg.noStroke();
 		  pg.rect(0, 0, pg.width, pg.height);
 		  pg.endDraw();
@@ -169,12 +178,12 @@ public class ProcessingMain extends PApplet {
 		  pg_last.beginDraw();
 		  pg_last.colorMode(HSB);
 		  pg_last.background(0);
-		  pg_last.fill(color, 255, 255, 250-(frameCount%25)*10);
+		  pg_last.fill(color, 255, 255, 250-(frameCount%5)*50);
 		  //System.out.println(249-frameCount%25*10);
 		  pg_last.noStroke();
 		  pg_last.rect(0, 0, pg_last.width, pg_last.height);
 		  
-		  if(frameCount%25==0){
+		  if(frameCount%5==0){
 			  next = true;
 			  pg_last.background(0);
 			  pg_last = pg;
