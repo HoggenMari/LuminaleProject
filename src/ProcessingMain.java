@@ -56,6 +56,10 @@ public class ProcessingMain extends PApplet {
 	private PGraphics pg_last;
 
 	private int color;
+
+	private ColorPoint cp;
+
+	private DrawPath dp;
 	
 	//Initiate as Application
 	public static void main(String args[]) {
@@ -67,7 +71,7 @@ public class ProcessingMain extends PApplet {
 		
 		size(1200,800);
 		
-		//frameRate(10);
+		frameRate(20);
 		
 		//Init GUI with Textfields, Buttons
 		cp5 = new ControlP5(this);
@@ -142,15 +146,31 @@ public class ProcessingMain extends PApplet {
 		path = scp.breadthFirstSearch(scp.nozzleList.get(0), scp.nozzleList.get(19));
 		
 		pg_last = createGraphics(12,5);
+		
+		cp = new ColorPoint(this, color);
+		dp = new DrawPath(path, cp);
 
 	}
 
 	public void draw() {
 		  background(255);
 
-		  color = frameCount%255;
+		  color = 0;
 		  
-		  if(next){
+		  //scp.clearSysA();
+		  
+		  //yellowCold();
+		  
+		  dp.update();
+		  dp.draw();
+		  
+		  if(dp.isDead()){
+			  System.out.println("GO HERE");
+			  path = scp.breadthFirstSearch(scp.nozzleList.get(0), scp.nozzleList.get(19));
+			  cp = new ColorPoint(this, color);
+				dp = new DrawPath(path, cp);  
+		  }
+			  /*if(next){
 			  //System.out.println(path.size());
 			  if(path.size()==0){
 				  int r1=0;
@@ -189,8 +209,27 @@ public class ProcessingMain extends PApplet {
 			  pg_last = pg;
 		  }
 		  
-		  pg_last.endDraw();
+		  pg_last.endDraw();*/
 
+		  //ArrayList<Nozzle> ng_list = scp.nozzleList.get((int)random(0,65)).getNeighbour();
+		  
+		  //scp.clearSysA();
+		  /*for(Nozzle n : scp.nozzleList){
+			  pg = n.sysA;
+			  pg.beginDraw();
+			  pg.background(0);
+			  pg.endDraw();
+		  }*/
+		  
+		  /*for(Nozzle n : ng_list) {
+			  pg = n.sysA;
+			  pg.beginDraw();
+			  pg.colorMode(HSB);
+			  pg.fill(color, 255, 255, 255);
+			  pg.noStroke();
+			  pg.rect(0, 0, pg.width, pg.height);
+			  pg.endDraw();
+		  }*/
 		  //System.out.println(frameRate);
 		  
 		  /*//for(Nozzle n : scp.nozzleList) {
@@ -281,102 +320,6 @@ public class ProcessingMain extends PApplet {
 			  }
 			 }*/
 			  
-			  
-			  
-				//Animate SystemB
-		  	  /*counter2 = -400+((frameCount%800)*1);
-		  	  int color1=32;
-		  	  int color2=150;
-		  	  int dimm=0; //(frameCount%300)/2;
-			  if(counter2<=0){
-			  for(Nozzle nozzle : scp.nozzleList){
-				  pg2 = nozzle.sysA;
-				  pg2.beginDraw();
-				  pg2.colorMode(RGB);
-				  pg2.background(255);
-				  if(counter2<=-200){
-					  //System.out.println("T1: "+(350-(counter2+400)));
-					  for(int iy=0; iy<pg2.height; iy++){
-							pg2.colorMode(HSB);	
-							pg2.fill(color1-5*iy,200-(counter2+400),255,255);
-							pg2.noStroke();
-							pg2.rect(0, iy, pg.width, 1);
-					   }
-				  //pg2.background(counter2,0,0);
-				  }else {
-					  //System.out.println("T2: "+(50+counter2));
-					  for(int iy=0; iy<pg2.height; iy++){
-							pg2.colorMode(HSB);	
-							pg2.fill(color2+5*iy,200+counter2,255,255);
-							pg2.noStroke();
-							pg2.rect(0, iy, pg.width, 1);
-							pg2.colorMode(RGB);	
-							pg2.fill(255,255,255,200-counter2);
-							pg2.noStroke();
-							pg2.rect(0, iy, pg.width, 1);
-					   }
-				  }
-				  pg2.colorMode(RGB);
-				  pg2.fill(0,0,0,dimm);
-				  pg2.noStroke();
-				  pg2.rect(0, 0, pg.width, pg.height);
-				  pg2.endDraw();
-				  
-				  for(int ix=0; ix<pg2.width; ix++){
-				  pg2.beginDraw();
-				  pg2.colorMode(RGB);
-				  pg2.fill(0,0,0,255);
-				  pg2.rect(ix,y,1,1);
-				  pg2.endDraw();
-				  }
-				  
-			  }
-			  }else{
-			  //counter2 = (frameCount%100)*4;
-			  for(Nozzle nozzle : scp.nozzleList){
-				  pg2 = nozzle.sysA;
-				  pg2.beginDraw();
-				  pg2.colorMode(RGB);
-				  pg2.background(0);
-				  if(counter2<200){
-					  //System.out.println("T3: "+(50-counter2));
-					  for(int iy=0; iy<pg2.height; iy++){
-							pg2.colorMode(HSB);	
-							pg2.fill(color2+5*iy,200-counter2,255,255);
-							pg2.noStroke();
-							pg2.rect(0, iy, pg.width, 1);
-							pg2.colorMode(RGB);	
-							pg2.fill(255,255,255,200-counter2);
-							pg2.noStroke();
-							pg2.rect(0, iy, pg.width, 1);
-					   }
-				  //pg2.background(counter2,0,0);
-				  }else {
-					  //System.out.println("T4: "+(-50+counter2));
-					  for(int iy=0; iy<pg2.height; iy++){
-							pg2.colorMode(HSB);	
-							pg2.fill(color1-5*iy,-200+counter2,255,255);
-							pg2.noStroke();
-							pg2.rect(0, iy, pg.width, 1);
-					   }
-				  }
-				  pg2.colorMode(RGB);
-				  pg2.fill(0,0,0,0);
-				  pg2.noStroke();
-				  pg2.rect(0, 0, pg.width, pg.height);
-				  pg2.endDraw();
-				  
-			  }
-			  
-			 }
-			  
-			  
-			  if(frameCount%5==0){
-				  y++;
-			  if(y>=5){
-				  y=0;
-			  }
-			  }
 				//Animate SystemB
 		  	  /*counter2 = -400+((frameCount%100)*8);
 		  	  int color1=42;
@@ -586,6 +529,95 @@ public class ProcessingMain extends PApplet {
 
 	}
 
+	public void yellowCold(){
+		//Animate SystemB
+	  	  counter2 = -400+((frameCount%800)*1);
+	  	  int color1=32;
+	  	  int color2=150;
+	  	  int dimm=0; //(frameCount%300)/2;
+		  if(counter2<=0){
+		  for(Nozzle nozzle : scp.nozzleList){
+			  pg2 = nozzle.sysA;
+			  pg2.beginDraw();
+			  pg2.colorMode(RGB);
+			  pg2.background(255);
+			  if(counter2<=-200){
+				  //System.out.println("T1: "+(350-(counter2+400)));
+				  for(int iy=0; iy<pg2.height; iy++){
+						pg2.colorMode(HSB);	
+						pg2.fill(color1-5*iy,200-(counter2+400),255,255);
+						pg2.noStroke();
+						pg2.rect(0, iy, pg.width, 1);
+				   }
+			  //pg2.background(counter2,0,0);
+			  }else {
+				  //System.out.println("T2: "+(50+counter2));
+				  for(int iy=0; iy<pg2.height; iy++){
+						pg2.colorMode(HSB);	
+						pg2.fill(color2+5*iy,200+counter2,255,255);
+						pg2.noStroke();
+						pg2.rect(0, iy, pg.width, 1);
+						pg2.colorMode(RGB);	
+						pg2.fill(255,255,255,200-counter2);
+						pg2.noStroke();
+						pg2.rect(0, iy, pg.width, 1);
+				   }
+			  }
+			  pg2.colorMode(RGB);
+			  pg2.fill(0,0,0,dimm);
+			  pg2.noStroke();
+			  pg2.rect(0, 0, pg.width, pg.height);
+			  pg2.endDraw();
+			  
+			  /*for(int ix=0; ix<pg2.width; ix++){
+			  pg2.beginDraw();
+			  pg2.colorMode(RGB);
+			  pg2.fill(0,0,0,255);
+			  pg2.rect(ix,y,1,1);
+			  pg2.endDraw();
+			  }*/
+			  
+		  }
+		  }else{
+		  //counter2 = (frameCount%100)*4;
+		  for(Nozzle nozzle : scp.nozzleList){
+			  pg2 = nozzle.sysA;
+			  pg2.beginDraw();
+			  pg2.colorMode(RGB);
+			  pg2.background(0);
+			  if(counter2<200){
+				  //System.out.println("T3: "+(50-counter2));
+				  for(int iy=0; iy<pg2.height; iy++){
+						pg2.colorMode(HSB);	
+						pg2.fill(color2+5*iy,200-counter2,255,255);
+						pg2.noStroke();
+						pg2.rect(0, iy, pg.width, 1);
+						pg2.colorMode(RGB);	
+						pg2.fill(255,255,255,200-counter2);
+						pg2.noStroke();
+						pg2.rect(0, iy, pg.width, 1);
+				   }
+			  //pg2.background(counter2,0,0);
+			  }else {
+				  //System.out.println("T4: "+(-50+counter2));
+				  for(int iy=0; iy<pg2.height; iy++){
+						pg2.colorMode(HSB);	
+						pg2.fill(color1-5*iy,-200+counter2,255,255);
+						pg2.noStroke();
+						pg2.rect(0, iy, pg.width, 1);
+				   }
+			  }
+			  pg2.colorMode(RGB);
+			  pg2.fill(0,0,0,0);
+			  pg2.noStroke();
+			  pg2.rect(0, 0, pg.width, pg.height);
+			  pg2.endDraw();
+			  
+		  }
+		  
+		 }
+	  scp.dimm(100);
+	}
 	
 	@SuppressWarnings("deprecation")
 	public void controlEvent(ControlEvent theEvent) {

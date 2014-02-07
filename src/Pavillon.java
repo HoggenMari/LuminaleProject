@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
+import processing.core.PGraphics;
 
 
 
@@ -298,4 +300,35 @@ public class Pavillon {
 		}
 		
 	}
+
+	//Drawing Methods
+	public void clearSysA(){
+		for(Nozzle n: nozzleList){
+		PGraphics pg = n.sysA;
+		pg.beginDraw();
+		pg.background(0);
+		pg.endDraw();
+		}
+	}
+	
+	public void clearSysB(){
+		for(Nozzle n: nozzleList){
+		PGraphics pg = n.sysB;
+		pg.beginDraw();
+		pg.background(0);
+		pg.endDraw();
+		}
+	}
+	
+	public void dimm(int alpha){
+		for(Nozzle n: nozzleList){
+			PGraphics pg = n.sysA;
+			pg.beginDraw();
+			pg.colorMode(PConstants.HSB);
+			pg.fill(0, 0, 0, alpha);
+			pg.rect(0, 0, pg.width, pg.height);
+			pg.endDraw();
+		}
+	}
+
 }

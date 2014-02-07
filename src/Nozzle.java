@@ -71,6 +71,10 @@ public class Nozzle {
 
 	}
 	
+	public ArrayList<Nozzle> getNeighbour(){
+		return neighbour;
+	}
+	
 	void setID(int id) {
 		this.id = id;
 	}
