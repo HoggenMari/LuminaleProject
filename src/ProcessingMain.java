@@ -57,9 +57,9 @@ public class ProcessingMain extends PApplet {
 
 	private int color;
 
-	private ColorPoint cp;
+	//private ColorPoint cp;
 
-	private DrawPath dp;
+	//private DrawPath dp;
 	
 	//Initiate as Application
 	public static void main(String args[]) {
@@ -71,7 +71,7 @@ public class ProcessingMain extends PApplet {
 		
 		size(1200,800);
 		
-		frameRate(20);
+		frameRate(50);
 		
 		//Init GUI with Textfields, Buttons
 		cp5 = new ControlP5(this);
@@ -147,30 +147,44 @@ public class ProcessingMain extends PApplet {
 		
 		pg_last = createGraphics(12,5);
 		
-		cp = new ColorPoint(this, color);
-		dp = new DrawPath(path, cp);
+		//cp = new ColorPoint(this, color);
+		//dp = new DrawPath(path, cp);
 
 	}
 
 	public void draw() {
 		  background(255);
 
-		  color = 0;
+		  //color = 0;
+		  int startHue = 240;
+		  
+		  int fr = frameCount%240;
+		  if(fr<120){
+		  startHue = startHue - fr;
+		  }else
+		  startHue = startHue - 240 + fr;
+			  
+		  System.out.println(startHue);
+		  
+		  for(Nozzle n : scp.nozzleList) {
+		  hsvGradient hsv1 = new hsvGradient(this, n, startHue-2*n.id);
+		  hsv1.draw(); 
+		  }
 		  
 		  //scp.clearSysA();
 		  
 		  //yellowCold();
 		  
-		  dp.update();
-		  dp.draw();
+		  //dp.update();
+		  //dp.draw();
 		  
-		  if(dp.isDead()){
+		  /*if(dp.isDead()){
 			  System.out.println("GO HERE");
 			  path = scp.breadthFirstSearch(scp.nozzleList.get(0), scp.nozzleList.get(19));
 			  cp = new ColorPoint(this, color);
 				dp = new DrawPath(path, cp);  
-		  }
-			  /*if(next){
+		  }*/
+			  if(next){
 			  //System.out.println(path.size());
 			  if(path.size()==0){
 				  int r1=0;
@@ -209,7 +223,7 @@ public class ProcessingMain extends PApplet {
 			  pg_last = pg;
 		  }
 		  
-		  pg_last.endDraw();*/
+		  pg_last.endDraw();
 
 		  //ArrayList<Nozzle> ng_list = scp.nozzleList.get((int)random(0,65)).getNeighbour();
 		  
