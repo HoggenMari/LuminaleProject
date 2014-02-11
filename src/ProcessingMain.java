@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
+import controlP5.Controller;
 import controlP5.Textfield;
 import processing.core.*;
 
@@ -56,6 +57,14 @@ public class ProcessingMain extends PApplet {
 	private PGraphics pg_last;
 
 	private int color;
+
+	private int startHue;
+
+	private ArrayList<hsvGradient> hsv1 = new ArrayList<hsvGradient>();
+
+	private int color1;
+
+	private int color2;
 
 	//private ColorPoint cp;
 
@@ -149,27 +158,66 @@ public class ProcessingMain extends PApplet {
 		
 		//cp = new ColorPoint(this, color);
 		//dp = new DrawPath(path, cp);
+		
+		startHue = 42;
+		
+		for(Nozzle n : scp.nozzleList){
+			  hsv1.add(new hsvGradient(this, n, startHue-2*n.id, 120, 120));
 
+		}
+
+		color1 = (int) random(0,360);
+		  color2 = (int) random(0,360);
 	}
 
 	public void draw() {
 		  background(255);
 
-		  //color = 0;
-		  int startHue = 240;
 		  
-		  int fr = frameCount%240;
-		  if(fr<120){
-		  startHue = startHue - fr;
-		  }else
-		  startHue = startHue - 240 + fr;
-			  
-		  System.out.println(startHue);
+		  int startHue = 42;
+		  int fr = frameCount%480;
+
 		  
-		  for(Nozzle n : scp.nozzleList) {
-		  hsvGradient hsv1 = new hsvGradient(this, n, startHue-2*n.id);
-		  hsv1.draw(); 
+		  if(fr==120){
+			  color1 = (int) random(-80,62);
+			  color2 = (int) random(175,210);
 		  }
+		  		  
+		  for(Nozzle n : scp.nozzleList) {
+			  
+
+			  if(fr==0){
+			  hsv1.get(n.id).setHue(color1-0.5*n.id);	  
+			  }else if(fr<120){
+			  //hsv1.get(n.id).updateHue(1);
+			  hsv1.get(n.id).updateSaturation(1);
+			  hsv1.get(n.id).updateBrightness(0.5);
+			  }else if(fr==120){
+			  hsv1.get(n.id).setHue(color2-0.5*n.id);
+		      }else if(fr<240){
+			  //hsv1.get(n.id).updateHue(1);
+			  hsv1.get(n.id).updateSaturation(-0.2);
+			  hsv1.get(n.id).updateBrightness(-(0.5));
+		  	  }else if(fr==240){
+		  	  hsv1.get(n.id).setHue(color2-0.5*n.id);
+		  	  }else if(fr<360){
+		  	  //hsv1.get(n.id).updateHue(-1);
+		  	  hsv1.get(n.id).updateSaturation(0.2);
+			  hsv1.get(n.id).updateBrightness(0.5);	  
+		  	  }else if(fr==360){
+			  hsv1.get(n.id).setHue(color1-0.5*n.id);
+		  	  }else{
+			  //hsv1.get(n.id).updateHue(-1);
+		  	  hsv1.get(n.id).updateSaturation(-1);
+			  hsv1.get(n.id).updateBrightness(-(0.5));		  		  
+		  	  }
+			  
+		  //hsvGradient hsv1 = new hsvGradient(this, n, startHue-2*n.id);
+		  hsv1.get(n.id).drawHueGradient();
+		  //hsv1.get(n.id).drawSaturationGradient();
+		  }
+		  
+		  //scp.dimm(40);
 		  
 		  //scp.clearSysA();
 		  
@@ -184,7 +232,7 @@ public class ProcessingMain extends PApplet {
 			  cp = new ColorPoint(this, color);
 				dp = new DrawPath(path, cp);  
 		  }*/
-			  if(next){
+			  /*if(next){
 			  //System.out.println(path.size());
 			  if(path.size()==0){
 				  int r1=0;
@@ -196,22 +244,22 @@ public class ProcessingMain extends PApplet {
 				  System.out.println(r1);
 				  System.out.println(r2);
 				  path = scp.breadthFirstSearch(scp.nozzleList.get(r1), scp.nozzleList.get(r2));
-				  color = 0;
+				  color = 360;
 			  }
 			  pg = path.removeLast().sysA;
 			  next = !next;
 		  }
 		  
 		  pg.beginDraw();
-		  pg.colorMode(HSB);
+		  pg.colorMode(RGB);
 		  pg.fill(color, 255, 255, (frameCount%5)*50);
 		  pg.noStroke();
 		  pg.rect(0, 0, pg.width, pg.height);
 		  pg.endDraw();
 		  
 		  pg_last.beginDraw();
-		  pg_last.colorMode(HSB);
-		  pg_last.background(0);
+		  pg_last.colorMode(RGB);
+		  //pg_last.background(0);
 		  pg_last.fill(color, 255, 255, 250-(frameCount%5)*50);
 		  //System.out.println(249-frameCount%25*10);
 		  pg_last.noStroke();
@@ -219,12 +267,15 @@ public class ProcessingMain extends PApplet {
 		  
 		  if(frameCount%5==0){
 			  next = true;
-			  pg_last.background(0);
+			  //pg_last.background(0);
 			  pg_last = pg;
 		  }
 		  
-		  pg_last.endDraw();
+		  pg_last.endDraw();*/
+		  
+		  
 
+		  //yellowCold();
 		  //ArrayList<Nozzle> ng_list = scp.nozzleList.get((int)random(0,65)).getNeighbour();
 		  
 		  //scp.clearSysA();
