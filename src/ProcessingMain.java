@@ -157,7 +157,7 @@ public class ProcessingMain extends PApplet {
 
 		  color = 0;
 		  
-		  //scp.clearSysA();
+		  scp.clearSysA();
 		  
 		  //yellowCold();
 		  
