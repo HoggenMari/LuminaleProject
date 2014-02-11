@@ -2,7 +2,6 @@ import java.util.LinkedList;
 
 import processing.core.PGraphics;
 
-
 public class DrawPath {
 	
 	private LinkedList<Nozzle> path;
@@ -27,6 +26,7 @@ public class DrawPath {
 		} else if (path.size()==0){
 			dead = true;
 		}
+		colorPoint.update(nozzle);
 	}
 	
 	public void draw() {

@@ -6,6 +6,7 @@
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import controlP5.ControlEvent;
@@ -60,6 +61,19 @@ public class ProcessingMain extends PApplet {
 	private ColorPoint cp;
 
 	private DrawPath dp;
+
+	private int color1;
+
+	private int color2;
+
+	private ArrayList<hsvGradient> hsv1 = new ArrayList<hsvGradient>();
+
+	private int startHue;
+	
+	//DrawPathApplication
+	private ArrayList<DrawPath> dpList= new ArrayList<DrawPath>();
+	private ArrayList<ColorPoint> cpList= new ArrayList<ColorPoint>();
+	int max_path = 1;
 	
 	//Initiate as Application
 	public static void main(String args[]) {
@@ -71,7 +85,7 @@ public class ProcessingMain extends PApplet {
 		
 		size(1200,800);
 		
-		frameRate(20);
+		//frameRate(10);
 		
 		//Init GUI with Textfields, Buttons
 		cp5 = new ControlP5(this);
@@ -149,27 +163,86 @@ public class ProcessingMain extends PApplet {
 		
 		cp = new ColorPoint(this, color);
 		dp = new DrawPath(path, cp);
+		
+		
+		startHue = 42;
+
+		for(Nozzle n : scp.nozzleList){
+			  hsv1.add(new hsvGradient(this, n, startHue-2*n.id, 120, 120));
+
+		}
+
+		color1 = (int) random(0,360);
+		  color2 = (int) random(0,360);
 
 	}
 
 	public void draw() {
 		  background(255);
-
-		  color = 0;
 		  
-		  scp.clearSysA();
+		  color1 = 120;
+		  color2 = 160;
+		  int startHue = 42;
+		  		  
+		  for(Nozzle n : scp.nozzleList) {
+			  
+
+			  int fr = frameCount%480;
+			  if(fr==0){
+			  hsv1.get(n.id).setHue(color1);	  
+			  }else if(fr<120){
+			  //hsv1.get(n.id).updateHue(1);
+			  hsv1.get(n.id).updateSaturation(1);
+			  hsv1.get(n.id).updateBrightness(1+0.01*n.id);
+			  }else if(fr==120){
+			  hsv1.get(n.id).setHue(color2);
+		      }else if(fr<240){
+			  //hsv1.get(n.id).updateHue(1);
+			  hsv1.get(n.id).updateSaturation(-0.2);
+			  hsv1.get(n.id).updateBrightness(-(1+0.1*n.id));
+		  	  }else if(fr==240){
+		  	  hsv1.get(n.id).setHue(color2);
+		  	  }else if(fr<360){
+		  	  //hsv1.get(n.id).updateHue(-1);
+		  	  hsv1.get(n.id).updateSaturation(0.2);
+			  hsv1.get(n.id).updateBrightness(1+0.1*n.id);	  
+		  	  }else if(fr==360){
+			  hsv1.get(n.id).setHue(color1);
+		  	  }else{
+			  //hsv1.get(n.id).updateHue(-1);
+		  	  hsv1.get(n.id).updateSaturation(-1);
+			  hsv1.get(n.id).updateBrightness(-(1+0.01*n.id));		  		  
+		  	  }
+			  
+		  //hsvGradient hsv1 = new hsvGradient(this, n, startHue-2*n.id);
+		  hsv1.get(n.id).drawHueGradient();
+		  //hsv1.get(n.id).drawSaturationGradient();
+		  }
+
+		  scp.dimm(120);
+
+		  //scp.clearSysA();
+
+		  //yellowCold();
+
+		  //color = 0;
+		  
+		  //scp.clearSysA();
 		  
 		  //yellowCold();
 		  
-		  dp.update();
+		  /*dp.update();
 		  dp.draw();
 		  
 		  if(dp.isDead()){
 			  System.out.println("GO HERE");
 			  path = scp.breadthFirstSearch(scp.nozzleList.get(0), scp.nozzleList.get(19));
 			  cp = new ColorPoint(this, color);
-				dp = new DrawPath(path, cp);  
-		  }
+			  dp = new DrawPath(path, cp);  
+		  }*/
+		  
+		  //drawPathApplication();
+		  
 			  /*if(next){
 			  //System.out.println(path.size());
 			  if(path.size()==0){
@@ -529,6 +602,35 @@ public class ProcessingMain extends PApplet {
 
 	}
 
+	public void drawPathApplication() {
+		if(dpList.size()<max_path){
+			int r1=0;
+			int r2=0;
+			do{
+			r1 = (int)random(0,0);
+			r2 = (int)random(20,20);
+			}while(r1==r2);
+			LinkedList<Nozzle> randomPath = scp.breadthFirstSearch(scp.nozzleList.get(r1), scp.nozzleList.get(r2));
+			ColorPoint cp = new ColorPoint(this, (int) random(180,240));
+			dpList.add(new DrawPath(randomPath, cp));
+		}
+		
+		for(Iterator<DrawPath> dpIterator = dpList.iterator(); dpIterator.hasNext();){
+		//for(DrawPath dp : dpList){
+			DrawPath dp = dpIterator.next();
+			dp.update();
+			dp.draw();
+			
+			if(dp.isDead()){
+				  System.out.println("GO HERE");
+				  dpIterator.remove();
+				  //path = scp.breadthFirstSearch(scp.nozzleList.get(0), scp.nozzleList.get(19));
+				  //cp = new ColorPoint(this, color);
+				  //dp = new DrawPath(path, cp);  
+			}
+		}
+	}
+	
 	public void yellowCold(){
 		//Animate SystemB
 	  	  counter2 = -400+((frameCount%800)*1);
