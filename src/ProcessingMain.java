@@ -75,6 +75,10 @@ public class ProcessingMain extends PApplet {
 	private ArrayList<ColorPoint> cpList= new ArrayList<ColorPoint>();
 	int max_path = 1;
 	
+	//DrawLightDot
+	final int LIGHT_DOT_COUNT = 40;
+	private ArrayList<LightDot> ldList= new ArrayList<LightDot>();
+	
 	//Initiate as Application
 	public static void main(String args[]) {
 	    PApplet.main(new String[] { "--present", "ProcessingMain" });
@@ -85,7 +89,7 @@ public class ProcessingMain extends PApplet {
 		
 		size(1200,800);
 		
-		//frameRate(10);
+		//frameRate(1);
 		
 		//Init GUI with Textfields, Buttons
 		cp5 = new ControlP5(this);
@@ -174,13 +178,21 @@ public class ProcessingMain extends PApplet {
 
 		color1 = (int) random(0,360);
 		  color2 = (int) random(0,360);
+		  
+		setUpLightDot();
 
 	}
 
 	public void draw() {
+		
+		  System.out.println(frameRate);
 		  background(255);
 		  
-		  color1 = 120;
+		  scp.clearSysA();
+		  
+		  scp.setColor(305, 55, 26);
+		  
+		  /*color1 = 120;
 		  color2 = 160;
 		  int startHue = 42;
 		  		  
@@ -217,10 +229,13 @@ public class ProcessingMain extends PApplet {
 		  //hsvGradient hsv1 = new hsvGradient(this, n, startHue-2*n.id);
 		  hsv1.get(n.id).drawHueGradient();
 		  //hsv1.get(n.id).drawSaturationGradient();
-		  }
+		  }*/
 
-		  scp.dimm(120);
+		  //scp.dimm(120);
 
+		  updateLightDot();
+		  drawLightDot();
+		  
 		  //scp.clearSysA();
 
 		  //yellowCold();
@@ -600,6 +615,79 @@ public class ProcessingMain extends PApplet {
 		  //Send DMX-Data
 		  scp.send();
 
+	}
+	
+	public void setUpLightDot(){
+		//Random Path
+		int r1=0;
+		int r2=0;
+		do{
+		r1 = (int)random(0,0);
+		r2 = (int)random(65,65);
+		}while(r1==r2);
+		LinkedList<Nozzle> randomPath = scp.breadthFirstSearch(scp.nozzleList.get(r1), scp.nozzleList.get(r2));
+		
+		//SetUpLightDot
+		int color = (int) random(255,255);
+		
+		for(int i=0; i<LIGHT_DOT_COUNT; i++){
+			System.out.println(i);
+			double R = 2;
+			
+			ldList.add(new LightDot(-5-i, 0, 1, 0, color, 255-5*i, randomPath));
+		}
+	}
+	
+	public void updateLightDot(){
+		for(Iterator<LightDot> ldIterator = ldList.iterator(); ldIterator.hasNext();){
+		//for(LightDot ld : ldList){
+		LightDot ld = ldIterator.next();
+			//ld.vx = 0;
+			//ld.vy = 0;
+					
+			
+			if(ld.x>=ld.current.sysA.width-1){
+				//System.out.println("Bla"+ld.clone.toString());
+				//ld.current = ld.clone.removeLast();
+				ld.x= 0;
+				ld.next();
+			}else{
+				ld.x += ld.vx;
+				ld.y += ld.vy;	
+			}
+			
+			if(ld.clone.size()==0){
+				ldIterator.remove();
+			}
+			
+			//System.out.println("Position X:"+ld.x);
+
+			
+		}
+		
+		if(ldList.size()==0){
+			setUpLightDot();
+		}
+	}
+	
+	public void drawLightDot(){
+		for(LightDot ld : ldList){		
+
+			//System.out.println("DRAW: "+ld.x);
+			PGraphics pg = ld.current.sysA;
+
+			if(ld.lifetime-50>0){
+				pg.beginDraw();
+				pg.noStroke();
+				pg.colorMode(HSB);
+				pg.fill(37,71,84,ld.lifetime);
+				pg.rect((int)ld.x,(int)ld.y,1,5);
+				pg.endDraw();
+				//ld.lifetime -= 0.5;
+			}else{
+			}
+				
+		}
 	}
 
 	public void drawPathApplication() {

@@ -330,5 +330,17 @@ public class Pavillon {
 			pg.endDraw();
 		}
 	}
-
+	
+	public void setColor(int hue, int saturation, int brightness){
+		for(Nozzle n: nozzleList){
+			PGraphics pg = n.sysA;
+			pg.beginDraw();
+			pg.colorMode(PConstants.HSB, 360, 100, 100);
+			pg.noStroke();
+			int c = pg.color(hue, saturation, brightness);
+			pg.fill(c);
+			pg.rect(0, 0, pg.width, pg.height);
+			pg.endDraw();
+		}
+	}
 }
