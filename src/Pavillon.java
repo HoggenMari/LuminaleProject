@@ -251,6 +251,7 @@ public class Pavillon {
 		
 		
 		do{
+			System.out.println("NOZZLE :"+nozzle_count);
 			byte[] buffer = nozzleList.get(nozzle_count).data;
 			
 			//Now write the RGB-values
@@ -266,6 +267,8 @@ public class Pavillon {
 			nozzle_count++;
 			//System.out.println(nozzle_count);
 		}while(port_map[nozzle_count]==i+1);
+		
+		System.out.println("PORT");
 		
 		for(int j=dataIndex; j<1458; j++){
 			data[dataIndex++]= (byte) 0;

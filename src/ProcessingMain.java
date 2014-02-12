@@ -76,7 +76,7 @@ public class ProcessingMain extends PApplet {
 	int max_path = 1;
 	
 	//DrawLightDot
-	final int LIGHT_DOT_COUNT = 40;
+	final int LIGHT_DOT_COUNT = 80;
 	private ArrayList<LightDot> ldList= new ArrayList<LightDot>();
 	
 	//Initiate as Application
@@ -169,15 +169,15 @@ public class ProcessingMain extends PApplet {
 		dp = new DrawPath(path, cp);
 		
 		
-		startHue = 42;
+		startHue = 120;
 
 		for(Nozzle n : scp.nozzleList){
-			  hsv1.add(new hsvGradient(this, n, startHue-2*n.id, 120, 120));
+			  hsv1.add(new hsvGradient(this, n, startHue-1*n.id, 120, 120));
 
 		}
 
-		color1 = (int) random(0,360);
-		  color2 = (int) random(0,360);
+		//color1 = (int) random(0,360);
+		  //color2 = (int) random(0,360);
 		  
 		setUpLightDot();
 
@@ -190,36 +190,36 @@ public class ProcessingMain extends PApplet {
 		  
 		  scp.clearSysA();
 		  
-		  scp.setColor(305, 55, 26);
+		  //scp.setColor(305, 55, 26);
 		  
-		  /*color1 = 120;
+		  color1 = 120;
 		  color2 = 160;
-		  int startHue = 42;
+		  //int startHue = 42;
 		  		  
 		  for(Nozzle n : scp.nozzleList) {
 			  
 
 			  int fr = frameCount%480;
 			  if(fr==0){
-			  hsv1.get(n.id).setHue(color1);	  
+			  hsv1.get(n.id).setHue(color1-1*n.id);	  
 			  }else if(fr<120){
 			  //hsv1.get(n.id).updateHue(1);
 			  hsv1.get(n.id).updateSaturation(1);
 			  hsv1.get(n.id).updateBrightness(1+0.01*n.id);
 			  }else if(fr==120){
-			  hsv1.get(n.id).setHue(color2);
+			  hsv1.get(n.id).setHue(color2-1*n.id);
 		      }else if(fr<240){
 			  //hsv1.get(n.id).updateHue(1);
 			  hsv1.get(n.id).updateSaturation(-0.2);
 			  hsv1.get(n.id).updateBrightness(-(1+0.1*n.id));
 		  	  }else if(fr==240){
-		  	  hsv1.get(n.id).setHue(color2);
+		  	  hsv1.get(n.id).setHue(color2-1*n.id);
 		  	  }else if(fr<360){
 		  	  //hsv1.get(n.id).updateHue(-1);
 		  	  hsv1.get(n.id).updateSaturation(0.2);
 			  hsv1.get(n.id).updateBrightness(1+0.1*n.id);	  
 		  	  }else if(fr==360){
-			  hsv1.get(n.id).setHue(color1);
+			  hsv1.get(n.id).setHue(color1-1*n.id);
 		  	  }else{
 			  //hsv1.get(n.id).updateHue(-1);
 		  	  hsv1.get(n.id).updateSaturation(-1);
@@ -229,14 +229,19 @@ public class ProcessingMain extends PApplet {
 		  //hsvGradient hsv1 = new hsvGradient(this, n, startHue-2*n.id);
 		  hsv1.get(n.id).drawHueGradient();
 		  //hsv1.get(n.id).drawSaturationGradient();
-		  }*/
+		  }
 
+		  scp.setColor(302, 75, 25);
+		  //scp.clearSysA();
+		  
 		  //scp.dimm(120);
+		  
+		  //yellowCold();
 
 		  updateLightDot();
 		  drawLightDot();
 		  
-		  //scp.clearSysA();
+		  
 
 		  //yellowCold();
 
@@ -592,7 +597,7 @@ public class ProcessingMain extends PApplet {
 				 }*/
 			  
 		  //Animate SystemB
-		  counter2 = (frameCount%400);
+		  /*counter2 = (frameCount%400);
 		  for(Nozzle nozzle : scp.nozzleList){
 			  pg2 = nozzle.sysB;
 			  pg2.beginDraw();
@@ -601,7 +606,7 @@ public class ProcessingMain extends PApplet {
 			  pg2.background(counter2,counter2,counter2);
 			  }else pg2.background(200+(200-counter2),200+(200-counter2),200+(200-counter2));
 			  pg2.endDraw();
-		  }
+		  }*/
 		  		  
 		  //Draw on GUI  
 		  node1.drawOnGui(10, 50);
@@ -614,6 +619,7 @@ public class ProcessingMain extends PApplet {
 		  
 		  //Send DMX-Data
 		  scp.send();
+		  
 
 	}
 	
@@ -625,7 +631,14 @@ public class ProcessingMain extends PApplet {
 		r1 = (int)random(0,0);
 		r2 = (int)random(65,65);
 		}while(r1==r2);
-		LinkedList<Nozzle> randomPath = scp.breadthFirstSearch(scp.nozzleList.get(r1), scp.nozzleList.get(r2));
+		//LinkedList<Nozzle> randomPath = scp.breadthFirstSearch(scp.nozzleList.get(r1), scp.nozzleList.get(r2));
+		LinkedList<Nozzle> randomPath = new LinkedList<Nozzle>();
+		randomPath.add(scp.nozzleList.get(5));
+		randomPath.add(scp.nozzleList.get(4));
+		randomPath.add(scp.nozzleList.get(3));
+		randomPath.add(scp.nozzleList.get(2));
+		randomPath.add(scp.nozzleList.get(1));
+		randomPath.add(scp.nozzleList.get(0));
 		
 		//SetUpLightDot
 		int color = (int) random(255,255);
@@ -634,7 +647,7 @@ public class ProcessingMain extends PApplet {
 			System.out.println(i);
 			double R = 2;
 			
-			ldList.add(new LightDot(-5-i, 0, 1, 0, color, 255-5*i, randomPath));
+			ldList.add(new LightDot(-5-2*i, 0, 2, 0, color, 255-5*i, randomPath));
 		}
 	}
 	
@@ -643,7 +656,7 @@ public class ProcessingMain extends PApplet {
 		//for(LightDot ld : ldList){
 		LightDot ld = ldIterator.next();
 			//ld.vx = 0;
-			//ld.vy = 0;
+			//ld.vy = 0.1;
 					
 			
 			if(ld.x>=ld.current.sysA.width-1){
@@ -681,7 +694,7 @@ public class ProcessingMain extends PApplet {
 				pg.noStroke();
 				pg.colorMode(HSB);
 				pg.fill(37,71,84,ld.lifetime);
-				pg.rect((int)ld.x,(int)ld.y,1,5);
+				pg.rect((int)ld.x,(int)ld.y,2,5);
 				pg.endDraw();
 				//ld.lifetime -= 0.5;
 			}else{
@@ -722,8 +735,8 @@ public class ProcessingMain extends PApplet {
 	public void yellowCold(){
 		//Animate SystemB
 	  	  counter2 = -400+((frameCount%800)*1);
-	  	  int color1=32;
-	  	  int color2=150;
+	  	  int color1=150;
+	  	  int color2=240;
 	  	  int dimm=0; //(frameCount%300)/2;
 		  if(counter2<=0){
 		  for(Nozzle nozzle : scp.nozzleList){
