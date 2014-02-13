@@ -172,7 +172,7 @@ public class ProcessingMain extends PApplet {
 		startHue = 120;
 
 		for(Nozzle n : scp.nozzleList){
-			  hsv1.add(new hsvGradient(this, n, startHue-1*n.id, 120, 120));
+			  hsv1.add(new hsvGradient(this, n, startHue-2*n.id, 120, 120));
 
 		}
 
@@ -180,6 +180,8 @@ public class ProcessingMain extends PApplet {
 		  //color2 = (int) random(0,360);
 		  
 		setUpLightDot();
+		
+		scp.start();
 
 	}
 
@@ -231,10 +233,10 @@ public class ProcessingMain extends PApplet {
 		  //hsv1.get(n.id).drawSaturationGradient();
 		  }
 
-		  scp.setColor(302, 75, 25);
+		  //scp.setColor(302, 75, 25);
 		  //scp.clearSysA();
 		  
-		  //scp.dimm(120);
+		  scp.dimm(120);
 		  
 		  //yellowCold();
 
@@ -618,7 +620,7 @@ public class ProcessingMain extends PApplet {
 		  node7.drawOnGui(900, 50);
 		  
 		  //Send DMX-Data
-		  scp.send();
+		  //scp.send();
 		  
 
 	}
@@ -633,6 +635,9 @@ public class ProcessingMain extends PApplet {
 		}while(r1==r2);
 		//LinkedList<Nozzle> randomPath = scp.breadthFirstSearch(scp.nozzleList.get(r1), scp.nozzleList.get(r2));
 		LinkedList<Nozzle> randomPath = new LinkedList<Nozzle>();
+		randomPath.add(scp.nozzleList.get(8));
+		randomPath.add(scp.nozzleList.get(7));
+		randomPath.add(scp.nozzleList.get(6));
 		randomPath.add(scp.nozzleList.get(5));
 		randomPath.add(scp.nozzleList.get(4));
 		randomPath.add(scp.nozzleList.get(3));
@@ -735,7 +740,7 @@ public class ProcessingMain extends PApplet {
 	public void yellowCold(){
 		//Animate SystemB
 	  	  counter2 = -400+((frameCount%800)*1);
-	  	  int color1=150;
+	  	  int color1=120;
 	  	  int color2=240;
 	  	  int dimm=0; //(frameCount%300)/2;
 		  if(counter2<=0){

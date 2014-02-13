@@ -15,11 +15,15 @@ import processing.core.PGraphics;
 
 
 
-public class Pavillon {
+public class Pavillon extends Thread {
 
 	private String IP_ADRESS;
 	private int PORT;
 	private int ID;
+	
+	boolean running = false;
+	int wait = 15;
+	int savedTime;
 	
 	PriorityQueue<Nozzle> vertexQueue = new PriorityQueue<Nozzle>();
 	List<Nozzle> path = new ArrayList<Nozzle>();
@@ -219,6 +223,29 @@ public class Pavillon {
 		  }
 		}
 	}
+	
+	public void start () {
+	    // Set running equal to true
+	    running = true;
+	    // Print messages
+	    System.out.println("Starting thread (will execute every " + wait + " milliseconds.)"); 
+	    // Do whatever start does in Thread, don't forget this!
+	    super.start();
+	}
+	
+	  // We must implement run, this gets triggered by start()
+	public void run () {
+	    while (true) {
+	      int passedTime = p.millis() - savedTime;
+	      savedTime = p.millis();
+	      System.out.println("PASSED TIME: "+passedTime);
+	      send();
+	      try {
+	        sleep((long)(wait));
+	      } catch (Exception e) {
+	      }
+	    }
+	  }
 	    
 	public void send() {
 		byte[] data = new byte[1472];
@@ -251,7 +278,7 @@ public class Pavillon {
 		
 		
 		do{
-			System.out.println("NOZZLE :"+nozzle_count);
+			//System.out.println("NOZZLE :"+nozzle_count);
 			byte[] buffer = nozzleList.get(nozzle_count).data;
 			
 			//Now write the RGB-values
@@ -268,7 +295,7 @@ public class Pavillon {
 			//System.out.println(nozzle_count);
 		}while(port_map[nozzle_count]==i+1);
 		
-		System.out.println("PORT");
+		//System.out.println("PORT");
 		
 		for(int j=dataIndex; j<1458; j++){
 			data[dataIndex++]= (byte) 0;
