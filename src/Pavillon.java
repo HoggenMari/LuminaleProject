@@ -228,7 +228,7 @@ public class Pavillon extends Thread {
 	    // Set running equal to true
 	    running = true;
 	    // Print messages
-	    System.out.println("Starting thread (will execute every " + wait + " milliseconds.)"); 
+	    //System.out.println("Starting thread (will execute every " + wait + " milliseconds.)"); 
 	    // Do whatever start does in Thread, don't forget this!
 	    super.start();
 	}
@@ -238,7 +238,7 @@ public class Pavillon extends Thread {
 	    while (true) {
 	      int passedTime = p.millis() - savedTime;
 	      savedTime = p.millis();
-	      System.out.println("PASSED TIME: "+passedTime);
+	      //System.out.println("PASSED TIME: "+passedTime);
 	      send();
 	      try {
 	        sleep((long)(wait));
