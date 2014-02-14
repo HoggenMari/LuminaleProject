@@ -7,19 +7,25 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 
 
-public class Shine {
+public class VerticalShine {
 	
 	PApplet p;
-	private static int LIGHT_DOT_COUNT=80;
+	private static int LIGHT_DOT_COUNT=255;
 	LinkedList<Nozzle> path = new LinkedList<Nozzle>();
 	ArrayList<LightDot> ldList= new ArrayList<LightDot>();
 	boolean dead = false;
 	int color;
 	
-	public Shine(PApplet p, LinkedList<Nozzle> path, int color) {
+	public VerticalShine(PApplet p, LinkedList<Nozzle> path, int color) {
 		this.p = p;
 		this.path = path;
 		this.color = color;
+		
+		p.colorMode(PConstants.HSB, 360, 100, 100, 100);
+		for(int i=0; i<LIGHT_DOT_COUNT; i++){
+			//System.out.println(i);			
+			ldList.add(new LightDot((int) p.random(0,0), -5-1*i, 0, 1, color, 255-i, path));
+		}
 	}
 
 	public void setUpShine() {
@@ -30,26 +36,30 @@ public class Shine {
 		
 		for(int i=0; i<LIGHT_DOT_COUNT; i++){
 			System.out.println(i);			
-			ldList.add(new LightDot(-5-2*i, 0, 2, 0, color, 255-5*i, path));
+			ldList.add(new LightDot(0, -5-1*i, 0, 1, color, 255-20*i, path));
 		}
+		
+		System.out.println("SETUP SETUP SETUP SETUP");
+
 	}
 	
 	public void updateShine() {
-		if(p.frameCount%4==0){
+		System.out.println("UPDATE UPDATE UPDATE UPDATE");
+		if(p.frameCount%1==0){
 		for(Iterator<LightDot> ldIterator = ldList.iterator(); ldIterator.hasNext();){
 		LightDot ld = ldIterator.next();
 
-			if(ld.x>=ld.current.sysA.width-1){
+			if(ld.y>=ld.current.sysA.height){
 				//System.out.println("Bla"+ld.clone.toString());
 				//ld.current = ld.clone.removeLast();
-				ld.x = 0;
+				ld.y = 0;
 				ld.next();
 			}else{
 				ld.x += ld.vx;
 				ld.y += ld.vy;	
 			}
 			
-			if(ld.clone.size()==0 && ld.x>=ld.current.sysA.width-1){
+			if(ld.clone.size()==0 && ld.y>=ld.current.sysA.height){
 				ldIterator.remove();
 			}
 			
@@ -58,6 +68,7 @@ public class Shine {
 		
 		if(ldList.size()==0){
 			dead = true;
+			System.out.println("DEAD DEAD DEAD DEAD");
 		}
 	  }
 	}
@@ -65,7 +76,7 @@ public class Shine {
 	public void drawShine() {
 		for(LightDot ld : ldList){		
 
-			//System.out.println("DRAW: "+ld.x);
+			System.out.println("DRAW: "+ld.x);
 			PGraphics pg = ld.current.sysA;
 
 			if(ld.lifetime-50>0){
@@ -73,7 +84,7 @@ public class Shine {
 				pg.noStroke();
 				pg.colorMode(PConstants.HSB, 360, 100, 100);
 				pg.fill(ld.col,ld.lifetime);
-				pg.rect((int)ld.x,(int)ld.y,2,5);
+				pg.rect((int)ld.x,(int)ld.y,12,1);
 				pg.endDraw();
 				//ld.lifetime -= 0.5;
 			}else{

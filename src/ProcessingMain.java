@@ -11,6 +11,7 @@ import java.util.LinkedList;
 
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
+import controlP5.Controller;
 import controlP5.Textfield;
 import processing.core.*;
 
@@ -77,9 +78,13 @@ public class ProcessingMain extends PApplet {
 	
 	//Shine
 	private static int SHINE_MAX = 1;
-	private ArrayList<HorizontalShine> shineList = new ArrayList<HorizontalShine>();
+	private static int SHINE_VERT_MAX = 1;
+	private ArrayList<HorizontalShine> horizontalShineList = new ArrayList<HorizontalShine>();
+	private ArrayList<VerticalShine> verticalShineList = new ArrayList<VerticalShine>();
 
 	private LinkedList<Nozzle> nozzlePath;
+
+	
 	
 	//Initiate as Application
 	public static void main(String args[]) {
@@ -91,7 +96,7 @@ public class ProcessingMain extends PApplet {
 		
 		size(1200,800);
 		
-		frameRate(20);
+		//frameRate(20);
 		
 		//Init GUI with Textfields, Buttons
 		cp5 = new ControlP5(this);
@@ -183,27 +188,36 @@ public class ProcessingMain extends PApplet {
 		  		
 		scp.start();
 		
-		//Random Path
+		//Horizontal Shine
 		for(int i=0; i<SHINE_MAX; i++) {
 		colorMode(HSB, 360, 100, 100);
 		color = color(50, 100, 100);
-		nozzlePath = createPath(0,1,2,3,4,5,6,7);
-		shineList.add(new HorizontalShine(this, nozzlePath, color));
-		shineList.get(i).setUpShine();;
+		nozzlePath = createRandomPath();
+		horizontalShineList.add(new HorizontalShine(this, nozzlePath, color,(int)random(1,4)));
+		//horizontalShineList.get(i).setUpShine();;
+		}
+		
+		//Vertical Shine
+		for(int i=0; i<SHINE_MAX; i++) {
+		colorMode(HSB, 360, 100, 100);
+		color = color(50, 100, 100);
+		nozzlePath = createRandomPath();
+		verticalShineList.add(new VerticalShine(this, nozzlePath, color));
+		verticalShineList.get(i).setUpShine();;
 		}
 	}
 
 	public void draw() {
 		
-		  //System.out.println(frameRate);
+		  /*System.out.println(frameRate);
 		  background(255);
 		  
 		  scp.clearSysA();
 		  
 		  //scp.setColor(305, 55, 26);
 		  
-		  color1 = 120;
-		  color2 = 160;
+		  color1 = 260;
+		  color2 = 302;
 		  //int startHue = 42;
 		  		  
 		  for(Nozzle n : scp.nozzleList) {
@@ -239,29 +253,88 @@ public class ProcessingMain extends PApplet {
 		  //hsvGradient hsv1 = new hsvGradient(this, n, startHue-2*n.id);
 		  hsv1.get(n.id).drawHueGradient();
 		  //hsv1.get(n.id).drawSaturationGradient();
-		  }
+		  }*/
 
-		  //scp.setColor(302, 75, 50);
+		  scp.setColor(302, 75, 50);
 		  //scp.clearSysA();
 		  
-		  scp.dimm(120);
+		  //scp.dimm(120);
 		  
-		  //yellowCold();
+		  yellowCold();
 
 		  //updateLightDot();
 		  //drawLightDot();
 		  
-		  for(int i=0; i<SHINE_MAX; i++) {
-		  shineList.get(i).updateShine();
-		  shineList.get(i).drawShine();
-		  if(shineList.get(i).isDead()){
-			    System.out.println("COUNTER: "+i);
-			    shineList.remove(i);
-			  	nozzlePath = createPath(0,1,2,3,4,5,6,7);
-				shineList.add(new HorizontalShine(this, nozzlePath, color));
-				shineList.get(i).setUpShine();  
+		  /*for(int i=0; i<horizontalShineList.size(); i++) {
+			  System.out.println("COUNTER: "+i);
+		  
+		  horizontalShineList.get(i).updateShine();
+		  horizontalShineList.get(i).drawShine();
+		  }*/
+		  
+		  for(Iterator<HorizontalShine> shIterator = horizontalShineList.iterator(); shIterator.hasNext();){
+			  HorizontalShine sh = shIterator.next();
+			  
+			  sh.updateShine();
+			  sh.drawShine();
+			  
+			  if(sh.isDead()){
+				  shIterator.remove();
+			  }
 		  }
+		  
+		  while(horizontalShineList.size()<SHINE_MAX){
+			  nozzlePath = createRandomPath();
+			  colorMode(HSB, 360, 100, 100);
+			  color = color((int)random(20,60), 100, 100);
+			  horizontalShineList.add(new HorizontalShine(this, nozzlePath, color, (int) random(1,4)));  
 		  }
+		  
+		  
+		  
+		  /*for(Iterator<VerticalShine> shIterator = verticalShineList.iterator(); shIterator.hasNext();){
+			  VerticalShine sh = shIterator.next();
+			  
+			  sh.updateShine();
+			  sh.drawShine();
+			  
+			  if(sh.isDead()){
+				  shIterator.remove();
+			  }
+		  }
+		  
+		  while(verticalShineList.size()<SHINE_VERT_MAX){
+			  //nozzlePath = createRandomPath();
+			  nozzlePath = createPath(7,6,5,4,3,2,1,0);
+			  colorMode(HSB, 360, 100, 100);
+			  color = color((int)random(280,320), 0, 100);
+			  verticalShineList.add(new VerticalShine(this, nozzlePath, color));  
+		  }*/
+		  
+		  
+		  
+		  
+		  /*if(horizontalShineList.size()<SHINE_MAX){
+			    
+			  for(int i=0; i<SHINE_MAX; i++){
+			  	nozzlePath = createPath((int)random(0,5));
+			  	horizontalShineList.add(new HorizontalShine(this, nozzlePath, color));
+			  	//horizontalShineList.get(i).setUpShine(); 
+			  }
+		  }*/
+		  
+		  
+		  /*for(int i=0; i<SHINE_MAX; i++) {
+			  verticalShineList.get(i).updateShine();
+			  verticalShineList.get(i).drawShine();
+			  if(verticalShineList.get(i).isDead()){
+				    System.out.println("COUNTER: "+i);
+				    verticalShineList.remove(i);
+				  	nozzlePath = createPath(0,1,2,3,4,5,6,7);
+				  	verticalShineList.add(new VerticalShine(this, nozzlePath, color));
+				  	verticalShineList.get(i).setUpShine();  
+			  }
+		  }*/
 
 		  //yellowCold();
 
@@ -646,17 +719,32 @@ public class ProcessingMain extends PApplet {
 	public LinkedList<Nozzle> createRandomPath() {
 	LinkedList<Nozzle> randomPath = new LinkedList<Nozzle>();
 	do{
-    int r1=0;
-	int r2=0;
-	do{
-	  r1 = (int)random(0,65);
-	  r2 = (int)random(0,65);
-	  System.out.println("randomPath.size: "+randomPath.size());
-	}while(r1==r2);
-	randomPath = scp.breadthFirstSearch(scp.nozzleList.get(r1), scp.nozzleList.get(r2));
+      int r1=0;
+	  int r2=0;
+	  do{
+	    r1 = (int)random(0,17);
+	    r2 = (int)random(57,65);
+	    System.out.println("randomPath.size: "+randomPath.size());
+	  }while(r1==r2 | r1>r2);
+	  randomPath = scp.breadthFirstSearch(scp.nozzleList.get(r1), scp.nozzleList.get(r2));
 	}while(randomPath.size()<5);
 	return randomPath;
 	}
+	
+	public LinkedList<Nozzle> createClosedPath() {
+		LinkedList<Nozzle> randomPath = new LinkedList<Nozzle>();
+		do{
+	      int r1=0;
+		  int r2=0;
+		  do{
+		    r1 = (int)random(0,16);
+		    r2 = (int)random(0,65);
+		    System.out.println("randomPath.size: "+randomPath.size());
+		  }while(r1==r2 | r1>r2);
+		  randomPath = scp.breadthFirstSearch(scp.nozzleList.get(r1), scp.nozzleList.get(r2));
+		}while(randomPath.size()<5);
+		return randomPath;
+		}
 	
 	public LinkedList<Nozzle> createPath(int...i) {
 		LinkedList<Nozzle> path = new LinkedList<Nozzle>();
