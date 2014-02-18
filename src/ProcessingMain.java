@@ -78,13 +78,15 @@ public class ProcessingMain extends PApplet {
 	
 	//Shine
 	private static int SHINE_MAX = 1;
-	private static int SHINE_VERT_MAX = 1;
+	private static int SHINE_VERT_MAX = 8;
 	private ArrayList<HorizontalShine> horizontalShineList = new ArrayList<HorizontalShine>();
 	private ArrayList<VerticalShine> verticalShineList = new ArrayList<VerticalShine>();
 
 	private LinkedList<Nozzle> nozzlePath;
 
-	
+	private ColorFade colorFade1, colorFade2, colorFade3, colorFade4, colorFade5;
+
+	int h=0;
 	
 	//Initiate as Application
 	public static void main(String args[]) {
@@ -189,34 +191,102 @@ public class ProcessingMain extends PApplet {
 		scp.start();
 		
 		//Horizontal Shine
-		for(int i=0; i<SHINE_MAX; i++) {
+		/*for(int i=0; i<SHINE_MAX; i++) {
 		colorMode(HSB, 360, 100, 100);
 		color = color(50, 100, 100);
 		nozzlePath = createRandomPath();
 		horizontalShineList.add(new HorizontalShine(this, nozzlePath, color,(int)random(1,4)));
 		//horizontalShineList.get(i).setUpShine();;
-		}
+		}*/
 		
 		//Vertical Shine
 		for(int i=0; i<SHINE_MAX; i++) {
 		colorMode(HSB, 360, 100, 100);
-		color = color(50, 100, 100);
-		nozzlePath = createRandomPath();
-		verticalShineList.add(new VerticalShine(this, nozzlePath, color));
-		verticalShineList.get(i).setUpShine();;
+		color = color(50, 0, 100);
+		nozzlePath = createPath(i);
+		verticalShineList.add(new VerticalShine(this, nozzlePath, color,1));
+		//verticalShineList.get(i).setUpShine();;
 		}
+		
+
+		colorFade1 = new ColorFade(this, 199, 89, 50);
+		colorFade1.hueFade(189, 10000);
+		colorFade1.brightnessFade(0, 10000);
+		colorFade1.start();
+		
+		/*colorFade2 = new ColorFade(this, 302, 100, 60);
+		colorFade2.brightnessFade(20, 3000);
+		colorFade2.start();
+		
+		colorFade3 = new ColorFade(this, 302, 100, 40);
+		colorFade3.saturationFade(60, 4000);
+		colorFade3.start();
+		
+		colorFade4 = new ColorFade(this, 302, 100, 20);
+		colorFade4.brightnessFade(60, 3000);
+		colorFade4.start();
+		
+		colorFade5 = new ColorFade(this, 302, 100, 0);
+		colorFade5.brightnessFade(70, 3000);
+		colorFade5.start();*/
 	}
 
 	public void draw() {
 		
-		  /*System.out.println(frameRate);
-		  background(255);
+		  //colorFade.draw();
+		  System.out.println(frameRate);
+		  //background(colorFade.hue, colorFade.saturation, colorFade.brightness);
 		  
-		  scp.clearSysA();
+		  /*for(Nozzle n : scp.nozzleList) {
+			  PGraphics pg = n.sysA;
+			  pg.beginDraw();
+			  pg.colorMode(HSB, 360, 100, 100);
+			  pg.noStroke();
+			  pg.fill(colorFade1.hue, colorFade1.saturation, colorFade1.brightness);
+			  pg.rect(0, 0, pg.width, 1);
+			  pg.fill(colorFade2.hue, colorFade2.saturation, colorFade2.brightness);
+			  pg.rect(0, 1, pg.width, 1);
+			  pg.fill(colorFade3.hue, colorFade3.saturation, colorFade3.brightness);
+			  pg.rect(0, 2, pg.width, 1);
+			  pg.fill(colorFade4.hue, colorFade4.saturation, colorFade4.brightness);
+			  pg.rect(0, 3, pg.width, 1);
+			  pg.fill(colorFade5.hue, colorFade5.saturation, colorFade5.brightness);
+			  pg.rect(0, 4, pg.width, 1);
+			  pg.endDraw();
+		  }*/
 		  
+		  for(Nozzle n : scp.nozzleList) {
+			  PGraphics pg = n.sysA;
+			  pg.beginDraw();
+			  pg.colorMode(HSB, 360, 100, 100);
+			  pg.noStroke();
+			  pg.fill(colorFade1.hue, colorFade1.saturation, colorFade1.brightness+n.id);
+			  pg.rect(0, 0, pg.width, pg.height);
+			  pg.endDraw();
+		  }
+		  //scp.clearSysA();
+		  
+		  
+		  //Glitzer
+		  //if(frameCount%10==0) {
+		  /*for(Nozzle n : nozzlePath) {
+			  PGraphics pg = n.sysA;
+			  pg.beginDraw();
+			  pg.colorMode(HSB, 360, 100, 100);
+			  pg.stroke(0, 0, 50);
+			  pg.strokeWeight(1);
+			  pg.point(random(0+h, 1+h), random(0, pg.height));
+			  pg.endDraw();
+		  }
+		  if(h<12) {
+		  h=h+1;
+		  } else {
+		  h = 0;	  
+		  }*/
+		  //}
 		  //scp.setColor(305, 55, 26);
 		  
-		  color1 = 260;
+		  /*color1 = 260;
 		  color2 = 302;
 		  //int startHue = 42;
 		  		  
@@ -227,40 +297,40 @@ public class ProcessingMain extends PApplet {
 			  if(fr==0){
 			  hsv1.get(n.id).setHue(color1-1*n.id);	  
 			  }else if(fr<120){
-			  //hsv1.get(n.id).updateHue(1);
-			  hsv1.get(n.id).updateSaturation(1);
-			  hsv1.get(n.id).updateBrightness(1+0.01*n.id);
+			  hsv1.get(n.id).updateHue(1);
+			  //hsv1.get(n.id).updateSaturation(1);
+			  //hsv1.get(n.id).updateBrightness(1+0.01*n.id);
 			  }else if(fr==120){
 			  hsv1.get(n.id).setHue(color2-1*n.id);
 		      }else if(fr<240){
-			  //hsv1.get(n.id).updateHue(1);
-			  hsv1.get(n.id).updateSaturation(-0.2);
-			  hsv1.get(n.id).updateBrightness(-(1+0.1*n.id));
+			  hsv1.get(n.id).updateHue(1);
+			  //hsv1.get(n.id).updateSaturation(-0.2);
+			  //hsv1.get(n.id).updateBrightness(-(1+0.1*n.id));
 		  	  }else if(fr==240){
 		  	  hsv1.get(n.id).setHue(color2-1*n.id);
 		  	  }else if(fr<360){
-		  	  //hsv1.get(n.id).updateHue(-1);
-		  	  hsv1.get(n.id).updateSaturation(0.2);
-			  hsv1.get(n.id).updateBrightness(1+0.1*n.id);	  
+		  	  hsv1.get(n.id).updateHue(-1);
+		  	  //hsv1.get(n.id).updateSaturation(0.2);
+			  //hsv1.get(n.id).updateBrightness(1+0.1*n.id);	  
 		  	  }else if(fr==360){
 			  hsv1.get(n.id).setHue(color1-1*n.id);
 		  	  }else{
-			  //hsv1.get(n.id).updateHue(-1);
-		  	  hsv1.get(n.id).updateSaturation(-1);
-			  hsv1.get(n.id).updateBrightness(-(1+0.01*n.id));		  		  
+			  hsv1.get(n.id).updateHue(-1);
+		  	  //hsv1.get(n.id).updateSaturation(-1);
+			  //hsv1.get(n.id).updateBrightness(-(1+0.01*n.id));		  		  
 		  	  }
 			  
 		  //hsvGradient hsv1 = new hsvGradient(this, n, startHue-2*n.id);
-		  hsv1.get(n.id).drawHueGradient();
-		  //hsv1.get(n.id).drawSaturationGradient();
+		  //hsv1.get(n.id).drawHueGradient();
+		  hsv1.get(n.id).drawSaturationGradient();
 		  }*/
 
-		  scp.setColor(302, 75, 50);
+		  //scp.setColor(302, 75, 50);
 		  //scp.clearSysA();
 		  
 		  //scp.dimm(120);
 		  
-		  yellowCold();
+		  //yellowCold();
 
 		  //updateLightDot();
 		  //drawLightDot();
@@ -286,8 +356,8 @@ public class ProcessingMain extends PApplet {
 		  while(horizontalShineList.size()<SHINE_MAX){
 			  nozzlePath = createRandomPath();
 			  colorMode(HSB, 360, 100, 100);
-			  color = color((int)random(20,60), 100, 100);
-			  horizontalShineList.add(new HorizontalShine(this, nozzlePath, color, (int) random(1,4)));  
+			  color = color((int)random(0,20), 100, 100);
+			  horizontalShineList.add(new HorizontalShine(this, nozzlePath, color, (int) random(1,1)));  
 		  }
 		  
 		  
@@ -303,9 +373,21 @@ public class ProcessingMain extends PApplet {
 			  }
 		  }
 		  
-		  while(verticalShineList.size()<SHINE_VERT_MAX){
-			  //nozzlePath = createRandomPath();
-			  nozzlePath = createPath(7,6,5,4,3,2,1,0);
+		  colorMode(HSB, 360, 100, 100);
+		  color = color((int)random(0,360), 100, 100);
+			
+		  if(verticalShineList.size()==0){
+			  for(int i=0; i<SHINE_MAX; i++) {
+					//colorMode(HSB, 360, 100, 100);
+					//color = color((int)random(0,360), 100, 100);
+					nozzlePath = createPath(i);
+					verticalShineList.add(new VerticalShine(this, nozzlePath, color,2));
+					//verticalShineList.get(i).setUpShine();;
+					}
+		  }*/
+		  /*while(verticalShineList.size()<SHINE_VERT_MAX){
+			  nozzlePath = createRandomPath();
+			  //nozzlePath = createPath(0);
 			  colorMode(HSB, 360, 100, 100);
 			  color = color((int)random(280,320), 0, 100);
 			  verticalShineList.add(new VerticalShine(this, nozzlePath, color));  
@@ -724,7 +806,7 @@ public class ProcessingMain extends PApplet {
 	  do{
 	    r1 = (int)random(0,17);
 	    r2 = (int)random(57,65);
-	    System.out.println("randomPath.size: "+randomPath.size());
+	    //System.out.println("randomPath.size: "+randomPath.size());
 	  }while(r1==r2 | r1>r2);
 	  randomPath = scp.breadthFirstSearch(scp.nozzleList.get(r1), scp.nozzleList.get(r2));
 	}while(randomPath.size()<5);
@@ -739,7 +821,7 @@ public class ProcessingMain extends PApplet {
 		  do{
 		    r1 = (int)random(0,16);
 		    r2 = (int)random(0,65);
-		    System.out.println("randomPath.size: "+randomPath.size());
+		    //System.out.println("randomPath.size: "+randomPath.size());
 		  }while(r1==r2 | r1>r2);
 		  randomPath = scp.breadthFirstSearch(scp.nozzleList.get(r1), scp.nozzleList.get(r2));
 		}while(randomPath.size()<5);

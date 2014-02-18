@@ -10,25 +10,26 @@ import processing.core.PGraphics;
 public class VerticalShine {
 	
 	PApplet p;
-	private static int LIGHT_DOT_COUNT=255;
+	private static int LIGHT_DOT_COUNT=100;
 	LinkedList<Nozzle> path = new LinkedList<Nozzle>();
 	ArrayList<LightDot> ldList= new ArrayList<LightDot>();
 	boolean dead = false;
 	int color;
+	int speed;
 	
-	public VerticalShine(PApplet p, LinkedList<Nozzle> path, int color) {
+	public VerticalShine(PApplet p, LinkedList<Nozzle> path, int color, int speed) {
 		this.p = p;
 		this.path = path;
 		this.color = color;
-		
+		this.speed = speed;
 		p.colorMode(PConstants.HSB, 360, 100, 100, 100);
 		for(int i=0; i<LIGHT_DOT_COUNT; i++){
-			//System.out.println(i);			
-			ldList.add(new LightDot((int) p.random(0,0), -5-1*i, 0, 1, color, 255-i, path));
+			System.out.println(i);			
+			ldList.add(new LightDot((int) p.random(0,0), -5-speed*i, 0, speed, color, 255-2*i, path));
 		}
 	}
 
-	public void setUpShine() {
+	/*public void setUpShine() {
 		
 		//SetUpLightDot
 		p.colorMode(PConstants.HSB, 360, 100, 100, 100);
@@ -41,7 +42,7 @@ public class VerticalShine {
 		
 		System.out.println("SETUP SETUP SETUP SETUP");
 
-	}
+	}*/
 	
 	public void updateShine() {
 		System.out.println("UPDATE UPDATE UPDATE UPDATE");
@@ -76,7 +77,7 @@ public class VerticalShine {
 	public void drawShine() {
 		for(LightDot ld : ldList){		
 
-			System.out.println("DRAW: "+ld.x);
+			//System.out.println("DRAW: "+ld.x);
 			PGraphics pg = ld.current.sysA;
 
 			if(ld.lifetime-50>0){
@@ -84,7 +85,7 @@ public class VerticalShine {
 				pg.noStroke();
 				pg.colorMode(PConstants.HSB, 360, 100, 100);
 				pg.fill(ld.col,ld.lifetime);
-				pg.rect((int)ld.x,(int)ld.y,12,1);
+				pg.rect((int)ld.x,(int)ld.y,12,speed);
 				pg.endDraw();
 				//ld.lifetime -= 0.5;
 			}else{

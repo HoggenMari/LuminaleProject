@@ -16,12 +16,17 @@ public class HorizontalShine {
 	boolean dead = false;
 	int color;
 	int speed;
+	ColorFade colorFade1;
 	
 	public HorizontalShine(PApplet p, LinkedList<Nozzle> path, int color, int speed) {
 		this.p = p;
 		this.path = path;
 		this.color = color;
 		this.speed = speed;
+		
+		colorFade1 = new ColorFade(p, 47, 90, 100);
+		colorFade1.hueFade(30, 1000);
+		colorFade1.start();
 		
 		p.colorMode(PConstants.HSB, 360, 100, 100, 100);
 		for(int i=0; i<LIGHT_DOT_COUNT; i++){
@@ -80,10 +85,13 @@ public class HorizontalShine {
 				pg.beginDraw();
 				pg.noStroke();
 				pg.colorMode(PConstants.HSB, 360, 100, 100);
-				pg.fill(ld.col,ld.lifetime);
+				pg.fill(colorFade1.hue, colorFade1.saturation, colorFade1.brightness,ld.lifetime);
 				pg.rect((int)ld.x,(int)ld.y,speed,5);
+				pg.stroke(160, 0, 100);
+				pg.strokeWeight(1);
+				pg.point(p.random(ld.x-20, ld.x), p.random(0, pg.height));
 				pg.endDraw();
-				//ld.lifetime -= 0.5;
+				//ld.lifetime -= 1;
 			}else{
 			}
 				
