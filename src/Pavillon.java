@@ -19,26 +19,35 @@ public class Pavillon extends Thread {
 
 	private String IP_ADRESS;
 	private int PORT;
-	private int ID;
+	private int[] ID;
 	
 	boolean running = false;
-	int wait = 15;
+	int wait = 25;
 	int savedTime;
 	
 	PriorityQueue<Nozzle> vertexQueue = new PriorityQueue<Nozzle>();
 	List<Nozzle> path = new ArrayList<Nozzle>();
-	
-	private static byte port_map[] =
+		
+	private static byte PORT_MAP[] =
 		{1, 1, 1, 1, 2, 2, 2, 2,
 		 3, 3, 3, 3, 3, 4, 4, 4, 4, 4,
 		 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6,
-		 7, 7, 7, 7, 8, 8, 8, 8, -1};
+		 7, 7, 7, 7, 8, 8, 8, 8,
+		 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2,
+		 3, 3, 3, 3, 3, 4, 4, 4, 4,
+		 5, 5, 5, 5, 5, 6, 6, 6, 6, -1};
+	
+	private static byte PORTS_ON_CONTROLLER[] = 
+		{8, 6};
 	
 	private static int puffer[] =
 		{6, 36, 0, 0, 0, 0, 0, 0,
 		 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		 0, 0, 0, 0, 0, 0, 0, 0,
+		 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	
 	private static byte adj_matrix1[][] =
 		{ { 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
@@ -130,11 +139,11 @@ public class Pavillon extends Thread {
 		PORT = port;
 	}
 
-	public int getID() {
+	public int[] getID() {
 		return ID;
 	}
 	
-	public void setID(int id) {
+	public void setID(int id[]) {
 		ID = id;
 	}
 	
@@ -202,10 +211,10 @@ public class Pavillon extends Thread {
 		return path;
 	}
 	
-	public Pavillon(PApplet parent, String ip, int i, int j) {
+	public Pavillon(PApplet parent, String ip, int port, int[] id) {
 		IP_ADRESS = ip;
-		PORT = i;
-		ID = j;
+		PORT = port;
+		ID = id;
 		p = parent;
 		
 		try {
@@ -238,7 +247,7 @@ public class Pavillon extends Thread {
 	    while (true) {
 	      int passedTime = p.millis() - savedTime;
 	      savedTime = p.millis();
-	      //System.out.println("PASSED TIME: "+passedTime);
+	      System.out.println("PASSED TIME: "+passedTime);
 	      send();
 	      try {
 	        sleep((long)(wait));
@@ -251,8 +260,11 @@ public class Pavillon extends Thread {
 		byte[] data = new byte[1472];
 		
 		int nozzle_count = 0;
-
-		for(int i=0; i<8; i++){
+		
+		for(int ctr=0; ctr<2; ctr++) {
+		
+		for(int i=0; i<PORTS_ON_CONTROLLER[ctr]; i++){
+			
 		int dataIndex = 0;
 
 		data[dataIndex++] = 'Y';
@@ -260,7 +272,7 @@ public class Pavillon extends Thread {
 		data[dataIndex++] = 'K';
 		data[dataIndex++] = 'J';
 		
-		data[dataIndex++] = (byte) ID;
+		data[dataIndex++] = (byte) ID[ctr];
 		data[dataIndex++] = 0;
 		data[dataIndex++] = 0x57;
 		data[dataIndex++] = 0x05;
@@ -278,7 +290,6 @@ public class Pavillon extends Thread {
 		
 		
 		do{
-			//System.out.println("NOZZLE :"+nozzle_count);
 			byte[] buffer = nozzleList.get(nozzle_count).data;
 			
 			//Now write the RGB-values
@@ -293,7 +304,7 @@ public class Pavillon extends Thread {
 			
 			nozzle_count++;
 			//System.out.println(nozzle_count);
-		}while(port_map[nozzle_count]==i+1);
+		}while(PORT_MAP[nozzle_count]==i+1);
 		
 		//System.out.println("PORT");
 		
@@ -326,6 +337,8 @@ public class Pavillon extends Thread {
         } catch (IOException e) {
         	
         }
+		
+		}
 		
 		}
 		

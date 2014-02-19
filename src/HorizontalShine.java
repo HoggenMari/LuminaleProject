@@ -10,7 +10,7 @@ import processing.core.PGraphics;
 public class HorizontalShine {
 	
 	PApplet p;
-	private static int LIGHT_DOT_COUNT=40;
+	private static int LIGHT_DOT_COUNT=80;
 	LinkedList<Nozzle> path = new LinkedList<Nozzle>();
 	ArrayList<LightDot> ldList= new ArrayList<LightDot>();
 	boolean dead = false;
@@ -86,10 +86,10 @@ public class HorizontalShine {
 				pg.noStroke();
 				pg.colorMode(PConstants.HSB, 360, 100, 100);
 				pg.fill(colorFade1.hue, colorFade1.saturation, colorFade1.brightness,ld.lifetime);
-				pg.rect((int)ld.x,(int)ld.y,speed,5);
-				pg.stroke(160, 0, 100);
-				pg.strokeWeight(1);
-				pg.point(p.random(ld.x-20, ld.x), p.random(0, pg.height));
+				pg.rect((int)ld.x,(int)ld.y,1,5);
+				//pg.stroke(colorFade1.hue, 0, 100);
+				//pg.strokeWeight(1);
+				//pg.point(p.random(0, pg.width), p.random(0, pg.height));
 				pg.endDraw();
 				//ld.lifetime -= 1;
 			}else{
@@ -99,6 +99,7 @@ public class HorizontalShine {
 	}
 	
 	public boolean isDead() {
+		colorFade1.stop();
 		return dead;
 	}
 }

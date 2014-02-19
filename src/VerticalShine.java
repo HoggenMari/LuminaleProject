@@ -10,7 +10,7 @@ import processing.core.PGraphics;
 public class VerticalShine {
 	
 	PApplet p;
-	private static int LIGHT_DOT_COUNT=100;
+	private static int LIGHT_DOT_COUNT=30;
 	LinkedList<Nozzle> path = new LinkedList<Nozzle>();
 	ArrayList<LightDot> ldList= new ArrayList<LightDot>();
 	boolean dead = false;
@@ -25,7 +25,7 @@ public class VerticalShine {
 		p.colorMode(PConstants.HSB, 360, 100, 100, 100);
 		for(int i=0; i<LIGHT_DOT_COUNT; i++){
 			System.out.println(i);			
-			ldList.add(new LightDot((int) p.random(0,0), -5-speed*i, 0, speed, color, 255-2*i, path));
+			ldList.add(new LightDot((int) p.random(0,0), -5-speed*i, 0, speed, color, 255-8*i, path));
 		}
 	}
 
@@ -86,6 +86,11 @@ public class VerticalShine {
 				pg.colorMode(PConstants.HSB, 360, 100, 100);
 				pg.fill(ld.col,ld.lifetime);
 				pg.rect((int)ld.x,(int)ld.y,12,speed);
+				pg.stroke(0, 0, 100);
+				pg.strokeWeight(1);
+				if(p.frameCount%1==0) {
+				//pg.point(p.random(0, pg.width), p.random(0, pg.height));
+				}
 				pg.endDraw();
 				//ld.lifetime -= 0.5;
 			}else{

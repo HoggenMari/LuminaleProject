@@ -52,7 +52,7 @@ public class ColorFade extends Thread {
 		}else{ 
 			hueAdd = 1;
 		}
-		System.out.println(diff+" "+hueTotalTime);	
+		//System.out.println(diff+" "+hueTotalTime);	
 		activeHue = true;
 		}
 	}
@@ -67,7 +67,7 @@ public class ColorFade extends Thread {
 		}else{ 
 			saturationAdd = 1;
 		}
-		System.out.println(diff+" "+saturationTotalTime);	
+		//System.out.println(diff+" "+saturationTotalTime);	
 		activeSaturation = true;
 		}
 	}
@@ -81,7 +81,7 @@ public class ColorFade extends Thread {
 		}else{ 
 			brightnessAdd = 1;
 		}
-		System.out.println(diff+" "+brightnessTotalTime);	
+		//System.out.println(diff+" "+brightnessTotalTime);	
 		activeBrightness = true;
 	}
 	
@@ -101,7 +101,7 @@ public class ColorFade extends Thread {
 		int brightnessPassedTime = p.millis() - brightnessSavedTime;
 		int huePassedTime = p.millis() - hueSavedTime;
 		if (saturationPassedTime >= saturationTotalTime) {
-			System.out.println(p.millis());
+			//System.out.println(p.millis());
 			p.colorMode(PConstants.HSB, 360, 100, 100);
 		    saturation = saturation + saturationAdd;
 		    //p.background(hue, saturation, brightness);
@@ -118,7 +118,7 @@ public class ColorFade extends Thread {
 		}
 		if(activeBrightness) {
 		if (brightnessPassedTime >= brightnessTotalTime) {
-			System.out.println(p.millis());
+			//System.out.println(p.millis());
 			p.colorMode(PConstants.HSB, 360, 100, 100);
 		    brightness = brightness + brightnessAdd;
 		    //p.background(hue, saturation, brightness);
@@ -136,7 +136,7 @@ public class ColorFade extends Thread {
 		}
 		if(activeHue) {
 			if (huePassedTime >= hueTotalTime) {
-				System.out.println(p.millis());
+				//System.out.println(p.millis());
 				p.colorMode(PConstants.HSB, 360, 100, 100);
 			    hue = hue + hueAdd;
 			    //p.background(hue, saturation, brightness);
