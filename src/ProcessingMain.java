@@ -76,7 +76,7 @@ public class ProcessingMain extends PApplet {
 	int max_path = 1;
 	
 	//Shine
-	private static int SHINE_MAX = 8;
+	private static int SHINE_HOR_MAX = 1;
 	private static int SHINE_VERT_MAX = 8;
 	private ArrayList<HorizontalShine> horizontalShineList = new ArrayList<HorizontalShine>();
 	private ArrayList<VerticalShine> verticalShineList = new ArrayList<VerticalShine>();
@@ -208,26 +208,26 @@ public class ProcessingMain extends PApplet {
 		}*/
 		
 
-		colorFade1 = new ColorFade(this, 60, 100, 100);
+		colorFade1 = new ColorFade(this, 302, 100, 100);
 		//colorFade1.hueFade(189, 10000);
-		colorFade1.saturationFade(20, 3000);
+		colorFade1.brightnessFade(20, 3000);
 		colorFade1.start();
 		
-		/*colorFade2 = new ColorFade(this, 302, 80, 100);
-		colorFade2.saturationFade(40, 1000);
+		colorFade2 = new ColorFade(this, 302, 100, 80);
+		colorFade2.brightnessFade(40, 1000);
 		colorFade2.start();
 		
-		colorFade3 = new ColorFade(this, 302, 60, 100);
-		colorFade3.saturationFade(60, 1000);
+		colorFade3 = new ColorFade(this, 302, 100, 60);
+		//colorFade3.brightnessFade(60, 1000);
 		colorFade3.start();
 		
-		colorFade4 = new ColorFade(this, 302, 40, 100);
-		colorFade4.saturationFade(80, 1000);
+		colorFade4 = new ColorFade(this, 302, 100, 40);
+		colorFade4.brightnessFade(80, 1000);
 		colorFade4.start();
 		
-		colorFade5 = new ColorFade(this, 302, 20, 100);
-		colorFade5.saturationFade(100, 1000);
-		colorFade5.start();*/
+		colorFade5 = new ColorFade(this, 302, 100, 20);
+		colorFade5.brightnessFade(100, 1000);
+		colorFade5.start();
 	}
 
 	public void draw() {
@@ -236,7 +236,8 @@ public class ProcessingMain extends PApplet {
 		  //System.out.println(frameRate);
 		  //background(colorFade.hue, colorFade.saturation, colorFade.brightness);
 		  
-		  /*for(Nozzle n : scp.nozzleList) {
+		
+		for(Nozzle n : scp.nozzleList) {
 			  PGraphics pg = n.sysA;
 			  pg.beginDraw();
 			  pg.colorMode(HSB, 360, 100, 100);
@@ -252,9 +253,28 @@ public class ProcessingMain extends PApplet {
 			  pg.fill(colorFade1.hue, colorFade1.saturation-40, colorFade1.brightness);
 			  pg.rect(0, 4, pg.width, 1);
 			  pg.endDraw();
-		  }*/
-		  
+		  }
+		
+		
 		  for(Nozzle n : scp.nozzleList) {
+			  PGraphics pg = n.sysA;
+			  pg.beginDraw();
+			  pg.colorMode(HSB, 360, 100, 100);
+			  pg.noStroke();
+			  pg.fill(colorFade1.hue, colorFade1.saturation, colorFade1.brightness);
+			  pg.rect(0, 0, pg.width, 1);
+			  pg.fill(colorFade2.hue, colorFade2.saturation-10, colorFade2.brightness);
+			  pg.rect(0, 1, pg.width, 1);
+			  pg.fill(colorFade3.hue, colorFade3.saturation-20, colorFade3.brightness);
+			  pg.rect(0, 2, pg.width, 1);
+			  pg.fill(colorFade4.hue, colorFade4.saturation-30, colorFade4.brightness);
+			  pg.rect(0, 3, pg.width, 1);
+			  pg.fill(colorFade5.hue, colorFade5.saturation-40, colorFade5.brightness);
+			  pg.rect(0, 4, pg.width, 1);
+			  pg.endDraw();
+		  }
+		  
+		  /*for(Nozzle n : scp.nozzleList) {
 			  PGraphics pg = n.sysA;
 			  pg.beginDraw();
 			  pg.colorMode(HSB, 360, 100, 100);
@@ -262,7 +282,8 @@ public class ProcessingMain extends PApplet {
 			  pg.fill(colorFade1.hue, colorFade1.saturation, colorFade1.brightness+n.id);
 			  pg.rect(0, 0, pg.width, pg.height);
 			  pg.endDraw();
-		  }
+		  }*/
+		
 		  //scp.clearSysA();
 		  
 		  
@@ -328,7 +349,7 @@ public class ProcessingMain extends PApplet {
 		  //scp.clearSysA();
 		  
 		  
-		  //yellowCold();
+		  yellowCold();
 
 		  //scp.dimm(80);
 		  //updateLightDot();
@@ -353,12 +374,12 @@ public class ProcessingMain extends PApplet {
 			  }
 		  }
 		  
-		  while(horizontalShineList.size()<SHINE_MAX){
+		  while(horizontalShineList.size()<SHINE_HOR_MAX){
 			  nozzlePath = createPath(7,6,5,4,3,2,1,0);
 			  //nozzlePath = createRandomPath();
 			  colorMode(HSB, 360, 100, 100);
-			  color = color((int)random(0,20), 100, 0);
-			  horizontalShineList.add(new HorizontalShine(this, nozzlePath, color, (int) random(1,1)));  
+			  color = color((int)random(0,20), 100, 100);
+			  horizontalShineList.add(new HorizontalShine(this, nozzlePath, color, (int) random(2,2)));  
 		  }*/
 		  
 		  
@@ -378,16 +399,17 @@ public class ProcessingMain extends PApplet {
 		  color = color((int)random(0,360), 100, 100);
 			
 		  if(verticalShineList.size()==0){
-			  if(frameCount%2000==0){
-			  for(int i=0; i<SHINE_MAX; i++) {
+			  //if(frameCount%2000==0){
+			  for(int i=0; i<SHINE_VERT_MAX; i++) {
 					//colorMode(HSB, 360, 100, 100);
 					//color = color((int)random(0,360), 100, 100);
 					nozzlePath = createPath(i);
 					verticalShineList.add(new VerticalShine(this, nozzlePath, color,1));
 					//verticalShineList.get(i).setUpShine();;
 					}
-			  }
+			  //}
 		  }*/
+		  
 		  /*while(verticalShineList.size()<SHINE_VERT_MAX){
 			  nozzlePath = createRandomPath();
 			  //nozzlePath = createPath(0);

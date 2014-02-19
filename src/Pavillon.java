@@ -29,7 +29,7 @@ public class Pavillon extends Thread {
 	List<Nozzle> path = new ArrayList<Nozzle>();
 		
 	private static byte PORT_MAP[] =
-		{1, 1, 1, 1, 2, 2, 2, 2,
+		{1, 1, 1, 2, 2, 2, 2, 2,
 		 3, 3, 3, 3, 3, 4, 4, 4, 4, 4,
 		 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6,
 		 7, 7, 7, 7, 8, 8, 8, 8,
@@ -41,7 +41,7 @@ public class Pavillon extends Thread {
 		{8, 6};
 	
 	private static int puffer[] =
-		{6, 36, 0, 0, 0, 0, 0, 0,
+		{6, 36, 21, 36, 0, 0, 0, 0,
 		 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		 0, 0, 0, 0, 0, 0, 0, 0,
@@ -247,7 +247,7 @@ public class Pavillon extends Thread {
 	    while (true) {
 	      int passedTime = p.millis() - savedTime;
 	      savedTime = p.millis();
-	      System.out.println("PASSED TIME: "+passedTime);
+	      //System.out.println("PASSED TIME: "+passedTime);
 	      send();
 	      try {
 	        sleep((long)(wait));
