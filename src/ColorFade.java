@@ -85,12 +85,12 @@ public class ColorFade extends Thread {
 		activeBrightness = true;
 	}
 	
-	public void start () {
+	public void start() {
 	    running = true;
 	    super.start();
 	}
 	
-	public void run () {
+	public void run() {
 	    while (true) {
 	      draw();
 	    }

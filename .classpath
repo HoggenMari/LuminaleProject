@@ -4,5 +4,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="core.jar"/>
 	<classpathentry kind="lib" path="controlP5/controlP5.jar"/>
+	<classpathentry kind="lib" path="video.jar"/>
+	<classpathentry kind="lib" path="gstreamer-java.jar"/>
+	<classpathentry kind="lib" path="jna.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

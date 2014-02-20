@@ -14,6 +14,7 @@ import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.Textfield;
 import processing.core.*;
+import processing.video.*;
 
 public class ProcessingMain extends PApplet {
 	
@@ -83,9 +84,13 @@ public class ProcessingMain extends PApplet {
 
 	private LinkedList<Nozzle> nozzlePath;
 
-	private ColorFade colorFade1, colorFade2, colorFade3, colorFade4, colorFade5;
+	private ColorFade colorFade1, colorFade2, colorFade3, colorFade4, colorFade5, colorFade6, colorFade7, colorFade8, colorFade9, colorFade10;
 
 	int h=0;
+
+	private ColorFadeList cfl;
+	
+	private Movie m;
 	
 	//Initiate as Application
 	public static void main(String args[]) {
@@ -208,55 +213,133 @@ public class ProcessingMain extends PApplet {
 		}*/
 		
 
-		colorFade1 = new ColorFade(this, 302, 100, 100);
-		//colorFade1.hueFade(189, 10000);
-		colorFade1.brightnessFade(20, 3000);
-		colorFade1.start();
+		colorFade1 = new ColorFade(this, 360, 100, 100);
+		colorFade1.hueFade(0, 100000);
+		colorFade1.brightnessFade(75, 1000);
+		//colorFade1.start();
 		
-		colorFade2 = new ColorFade(this, 302, 100, 80);
-		colorFade2.brightnessFade(40, 1000);
-		colorFade2.start();
+		colorFade2 = new ColorFade(this, 360, 100, 100);
+		colorFade2.hueFade(0, 100000);
+		colorFade2.brightnessFade(50, 1000);
+		//colorFade2.start();
 		
-		colorFade3 = new ColorFade(this, 302, 100, 60);
-		//colorFade3.brightnessFade(60, 1000);
-		colorFade3.start();
+		colorFade3 = new ColorFade(this, 360, 100, 100);
+		colorFade3.hueFade(0, 100000);
+		colorFade3.brightnessFade(25, 1000);
+		//colorFade3.start();
 		
-		colorFade4 = new ColorFade(this, 302, 100, 40);
-		colorFade4.brightnessFade(80, 1000);
-		colorFade4.start();
+		colorFade4 = new ColorFade(this, 360, 100, 100);
+		colorFade4.hueFade(0, 100000);
+		colorFade4.brightnessFade(0, 1000);
+		//colorFade4.start();
 		
-		colorFade5 = new ColorFade(this, 302, 100, 20);
+		colorFade5 = new ColorFade(this, 360, 100, 0);
+		colorFade5.hueFade(0, 100000);
 		colorFade5.brightnessFade(100, 1000);
-		colorFade5.start();
+		//colorFade5.start();
+		
+		colorFade6 = new ColorFade(this, 360, 100, 25);
+		colorFade6.hueFade(0, 100000);
+		colorFade6.brightnessFade(100, 1000);
+		//colorFade6.start();
+		
+		colorFade7 = new ColorFade(this, 360, 100, 50);
+		colorFade7.hueFade(0, 100000);
+		colorFade7.brightnessFade(100, 1000);
+		//colorFade7.start();
+		
+		colorFade8 = new ColorFade(this, 360, 100, 75);
+		colorFade8.hueFade(0, 100000);
+		colorFade8.brightnessFade(100, 1000);
+		//colorFade8.start();
+		
+		/*colorFade9 = new ColorFade(this, 360, 100, 10);
+		colorFade9.hueFade(0, 100000);
+		colorFade9.brightnessFade(100, 1000);
+		//colorFade9.start();
+		
+		colorFade10 = new ColorFade(this, 360, 100, 0);
+		colorFade10.hueFade(0, 100000);
+		colorFade10.brightnessFade(100, 1000);
+		//colorFade10.start();*/
+		
+		cfl = new ColorFadeList(this);
+		cfl.addColorFade(colorFade1);
+		cfl.addColorFade(colorFade2);
+		cfl.addColorFade(colorFade3);
+		cfl.addColorFade(colorFade4);
+		cfl.addColorFade(colorFade5);
+		cfl.addColorFade(colorFade6);
+		cfl.addColorFade(colorFade7);
+		cfl.addColorFade(colorFade8);
+		//cfl.addColorFade(colorFade9);
+		//cfl.addColorFade(colorFade10);
+		cfl.start();
+		
+		m = new Movie(this, "/honess.avi");
+		m.loop();
+	}
+	
+	// Called every time a new frame is available to read
+	public void movieEvent(Movie m) {
+	  m.read();
 	}
 
 	public void draw() {
 		
+		
+		//Movie
+		/*PImage imgMovie = m.get();
+		for(Nozzle n : scp.nozzleList) {
+			PGraphics pg = n.sysA;
+			pg.beginDraw();
+			pg.set(0,0,imgMovie);
+		}*/
+		
 		  //colorFade.draw();
 		  //System.out.println(frameRate);
 		  //background(colorFade.hue, colorFade.saturation, colorFade.brightness);
-		  
 		
-		for(Nozzle n : scp.nozzleList) {
+		/*for(Nozzle n : scp.nozzleList) {
 			  PGraphics pg = n.sysA;
 			  pg.beginDraw();
 			  pg.colorMode(HSB, 360, 100, 100);
 			  pg.noStroke();
-			  pg.fill(colorFade1.hue, colorFade1.saturation, colorFade1.brightness);
-			  pg.rect(0, 0, pg.width, 1);
-			  pg.fill(colorFade1.hue, colorFade1.saturation-10, colorFade1.brightness);
-			  pg.rect(0, 1, pg.width, 1);
-			  pg.fill(colorFade1.hue, colorFade1.saturation-20, colorFade1.brightness);
-			  pg.rect(0, 2, pg.width, 1);
-			  pg.fill(colorFade1.hue, colorFade1.saturation-30, colorFade1.brightness);
-			  pg.rect(0, 3, pg.width, 1);
-			  pg.fill(colorFade1.hue, colorFade1.saturation-40, colorFade1.brightness);
-			  pg.rect(0, 4, pg.width, 1);
+			  pg.fill(colorFade1.hue-n.id*1, colorFade1.saturation, colorFade1.brightness);
+			  pg.rect(0, 0, 2, 1);
+			  pg.rect(4, 0, 2, 1);
+			  pg.fill(colorFade2.hue-n.id*1, colorFade2.saturation, colorFade2.brightness);
+			  pg.rect(0, 1, 2, 1);
+			  pg.rect(4, 1, 2, 1);
+			  pg.fill(colorFade3.hue-n.id*1, colorFade3.saturation, colorFade3.brightness);
+			  pg.rect(0, 2, 2, 1);
+			  pg.rect(4, 2, 2, 1);
+			  pg.fill(colorFade4.hue-n.id*1, colorFade4.saturation, colorFade4.brightness);
+			  pg.rect(0, 3, 2, 1);
+			  pg.rect(4, 3, 2, 1);
+			  pg.fill(colorFade5.hue-n.id*1, colorFade5.saturation, colorFade5.brightness);
+			  pg.rect(0, 0, 2, 1);
+			  pg.rect(4, 0, 2, 1);
+			  pg.fill(colorFade6.hue-n.id*1, colorFade6.saturation, colorFade6.brightness);
+			  pg.rect(2, 1, 2, 1);
+			  pg.rect(6, 1, 2, 1);
+			  pg.fill(colorFade7.hue-n.id*1, colorFade7.saturation, colorFade7.brightness);
+			  pg.rect(2, 2, 2, 1);
+			  pg.rect(6, 2, 2, 1);
+			  pg.fill(colorFade8.hue-n.id*1, colorFade8.saturation, colorFade8.brightness);
+			  pg.rect(2, 3, 2, 1);
+			  pg.rect(6, 3, 2, 1);
+			  //pg.fill(colorFade9.hue-n.id*1, colorFade9.saturation, colorFade9.brightness);
+			  //pg.rect(2, 3, 2, 1);
+			  //pg.rect(6, 3, 2, 1);
+			  //pg.fill(colorFade10.hue-n.id*1, colorFade10.saturation, colorFade10.brightness);
+			  //pg.rect(2, 4, 2, 1);
+			  //pg.rect(6, 4, 2, 1);
 			  pg.endDraw();
-		  }
+		  }*/
 		
 		
-		  for(Nozzle n : scp.nozzleList) {
+		  /*for(Nozzle n : scp.nozzleList) {
 			  PGraphics pg = n.sysA;
 			  pg.beginDraw();
 			  pg.colorMode(HSB, 360, 100, 100);
@@ -272,7 +355,7 @@ public class ProcessingMain extends PApplet {
 			  pg.fill(colorFade5.hue, colorFade5.saturation-40, colorFade5.brightness);
 			  pg.rect(0, 4, pg.width, 1);
 			  pg.endDraw();
-		  }
+		  }*/
 		  
 		  /*for(Nozzle n : scp.nozzleList) {
 			  PGraphics pg = n.sysA;
@@ -346,10 +429,10 @@ public class ProcessingMain extends PApplet {
 		  }*/
 
 		  //scp.setColor(302, 75, 50);
-		  //scp.clearSysA();
+		  scp.clearSysA();
 		  
 		  
-		  yellowCold();
+		  //yellowCold();
 
 		  //scp.dimm(80);
 		  //updateLightDot();
@@ -363,7 +446,7 @@ public class ProcessingMain extends PApplet {
 		  }*/
 		  
 		  
-		  /*for(Iterator<HorizontalShine> shIterator = horizontalShineList.iterator(); shIterator.hasNext();){
+		  for(Iterator<HorizontalShine> shIterator = horizontalShineList.iterator(); shIterator.hasNext();){
 			  HorizontalShine sh = shIterator.next();
 			  
 			  sh.updateShine();
@@ -380,7 +463,7 @@ public class ProcessingMain extends PApplet {
 			  colorMode(HSB, 360, 100, 100);
 			  color = color((int)random(0,20), 100, 100);
 			  horizontalShineList.add(new HorizontalShine(this, nozzlePath, color, (int) random(2,2)));  
-		  }*/
+		  }
 		  
 		  
 		  
@@ -797,7 +880,7 @@ public class ProcessingMain extends PApplet {
 				 }*/
 			  
 		  //Animate SystemB
-		  /*counter2 = (frameCount%400);
+		  counter2 = (frameCount%400);
 		  for(Nozzle nozzle : scp.nozzleList){
 			  pg2 = nozzle.sysB;
 			  pg2.beginDraw();
@@ -806,7 +889,7 @@ public class ProcessingMain extends PApplet {
 			  pg2.background(counter2,counter2,counter2);
 			  }else pg2.background(200+(200-counter2),200+(200-counter2),200+(200-counter2));
 			  pg2.endDraw();
-		  }*/
+		  }
 		  		  
 		  //Draw on GUI  
 		  node1.drawOnGui(10, 50);
@@ -979,6 +1062,7 @@ public class ProcessingMain extends PApplet {
 		 }
 	  scp.dimm(100);
 	}
+
 	
 	@SuppressWarnings("deprecation")
 	public void controlEvent(ControlEvent theEvent) {
